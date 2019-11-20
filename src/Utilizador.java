@@ -5,7 +5,7 @@ public class Utilizador {
 	private String nome;
 	private ArrayList<Produto> produtos;
 	
-	public Utilizador(int id, String nome) {
+	public Utilizador(String nome) {
 		this.nome = nome;
 		produtos = new ArrayList<Produto>();
 	}

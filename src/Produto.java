@@ -1,13 +1,19 @@
 
 public class Produto {
 
-	private int id;
+	private int preco;
+	private Tipo p;
+	private String nome;
 	
-	public Produto(int id) {
-		this.id = id;
+	public Produto(String nome, Tipo p, int preco) {
+		this.nome = nome;
+		this.p = p;
+		this.preco = preco;
 	}
 	
-	public int getID() {
-		return id;
+	
+	
+	public int getPreco() {
+		return preco;
 	}
 }
