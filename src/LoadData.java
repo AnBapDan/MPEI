@@ -11,6 +11,7 @@ public class LoadData {
 			String[] prod = tmp[1].split(",");						//Divide os produtos entre si
 			for(int i =0; i<prod.length; i++ ) {
 				String[] d= prod[i].split("#");						//Divide os produtos por Nome, tipo e preço 
+				
 				Produto f = new Produto(d[0],d[1],Integer.parseInt(d[2]));
 				if()
 
