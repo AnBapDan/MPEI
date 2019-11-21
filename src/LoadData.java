@@ -21,9 +21,12 @@ public class LoadData {
 					}
 				}
 				
-				Produto p = new Produto(d[0],type,Integer.parseInt(d[2]));
+				Produto p = new Produto(Integer.parseInt(d[0]),type,Integer.parseInt(d[2]));
 				boolean b = BloomFilter.productVerify(p);
-				if(b) prodTmp[j] = p;
+				if(!b) {
+					prodTmp[j] = p;
+					
+				}
 				
 
 				Utilizador a = new Utilizador(tmp[0]);

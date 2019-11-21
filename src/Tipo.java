@@ -3,32 +3,32 @@
 	
 public enum Tipo {
 	
-	Tecnologia(0) {
+	Tecnologia(1) {
 		public String toString() {
 			return "Tecnologia";
 		}
 	},
-	Ciencia(1) {
+	Ciencia(2) {
 		public String toString() {
 			return "Ciencia";
 		}
 	},
-	Comida(2) {
+	Comida(3) {
 		public String toString() {
 			return "Comida";
 		}
 	},
-	Bebida(3) {
+	Bebida(4) {
 		public String toString() {
 			return "Bebida";
 		}
 	},
-	Domestico(4) {
+	Domestico(5) {
 		public String toString() {
-			return "Domesticos";
+			return "Domestico";
 		}
 	},
-	Outros(5) {
+	Outros(6) {
 		public String toString() {
 			return "Outros";
 		}
@@ -42,7 +42,4 @@ public enum Tipo {
 	public int getVal() {
 		return val;
 	}
-
-	
-
 }

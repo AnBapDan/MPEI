@@ -3,16 +3,16 @@ public class Produto {
 
 	private double preco;
 	private Tipo tipo;
-	private String nome;
+	private int id;
 	
-	public Produto(String nome, Tipo p, double preco) {
-		this.nome = nome;
+	public Produto(int id, Tipo p, double preco) {
+		this.id = id;
 		this.tipo = p;
 		this.preco = preco;
 	}
 	
-	public String getNome() {
-		return nome;
+	public int getID() {
+		return id;
 	}
 	
 	public double getPreco() {
