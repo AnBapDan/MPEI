@@ -2,18 +2,33 @@
 public class Produto {
 
 	private int preco;
-	private Tipo p;
+	private Tipo tipo;
 	private String nome;
 	
 	public Produto(String nome, Tipo p, int preco) {
 		this.nome = nome;
-		this.p = p;
+		this.tipo = p;
 		this.preco = preco;
 	}
 	
-	
+	public String getNome() {
+		return nome;
+	}
 	
 	public int getPreco() {
 		return preco;
+	}
+	
+	public Tipo getTipo() {
+		return tipo;
+	}
+	
+	public boolean exists() {
+		for(Produto tmp : Utilizador.getExistingProds()) {
+			if(this.equals(tmp)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
