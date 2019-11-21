@@ -1,11 +1,11 @@
 
 public class Produto {
 
-	private int preco;
+	private double preco;
 	private Tipo tipo;
 	private String nome;
 	
-	public Produto(String nome, Tipo p, int preco) {
+	public Produto(String nome, Tipo p, double preco) {
 		this.nome = nome;
 		this.tipo = p;
 		this.preco = preco;
@@ -15,7 +15,7 @@ public class Produto {
 		return nome;
 	}
 	
-	public int getPreco() {
+	public double getPreco() {
 		return preco;
 	}
 	

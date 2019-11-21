@@ -21,15 +21,15 @@ public class BloomFilter {
 		return 0;
 	}
 	
-//	public boolean verifyUser(Utilizador u) {
-//		return false;
-//	}
-//	
-//	public boolean verifyProduct(Produto p) {
-//		return false;
-//	}
+	public static boolean userVerify(Utilizador u) {
+		return false;
+	}
 	
-	public boolean verify(Utilizador u, Produto p) {
+	public static boolean productVerify(Produto p) {
+		return false;
+	}
+	
+	public static boolean verify(Utilizador u, Produto p) {
 		return false;
 	}
 }
