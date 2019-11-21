@@ -5,7 +5,6 @@ public class Utilizador {
 	private static ArrayList<Utilizador> lista;
 	private String nome;
 	private ArrayList<Produto> produtos;
-	private static ArrayList<Produto> existingProds = new ArrayList<Produto>();
 	
 	public Utilizador(String nome) {
 		this.nome = nome;
@@ -25,12 +24,12 @@ public class Utilizador {
 		return produtos;
 	}
 	
-	public ArrayList<Utilizador> getLista() {
+	public static ArrayList<Utilizador> getLista() {
 		return lista;
 	}
 	
-	public static ArrayList<Produto> getExistingProds() {
-		return existingProds;
+	public static int size() {
+		return lista.size();
 	}
 	
 	public static void addUser(String nome, ArrayList<Produto> p) {
