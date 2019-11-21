@@ -3,7 +3,7 @@ public class Convert {
 	private Utilizador a;
 	private Produto p;
 	private String prod;
-	private Tipo t;
+	private int t;
 	private double preco;
 	
 	public Convert(Utilizador a) {
