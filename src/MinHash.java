@@ -11,7 +11,7 @@ public class MinHash {
 	
 	
 	public static void main() {
-		users
+		users a
 	}
 	
 	private  double[][][] getMatrix() {
