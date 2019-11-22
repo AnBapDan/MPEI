@@ -13,7 +13,7 @@ public class LoadData {
 			
 			String[] prod = tmp[1].split(",");						//Divide os produtos entre si
 			for(int i =0; i < prod.length; i++ ) {
-				String[] d= prod[i].split("#");						//Divide os produtos por Nome, tipo e preco 
+				String[] d = prod[i].split("#");					//Divide os produtos por Nome, tipo e preco 
 				Tipo type = Tipo.Outros;
 				for(Tipo t : Tipo.values()) {
 					if(d[1].equals(Tipo.valueOf(t.toString()))) {
@@ -22,17 +22,12 @@ public class LoadData {
 				}
 				
 				Produto p = new Produto(Integer.parseInt(d[0]),type,Integer.parseInt(d[2]));
-				boolean b = BloomFilter.productVerify(p);
-				if(!b) {
-					prodTmp[j] = p;
-					
-				}
-				
 
 				Utilizador a = new Utilizador(tmp[0]);
 				
-				BloomFilter.userVerify(a);
+				BloomFilter.add(a,p);
 			}
 		}
+		lFile.close();
 	}
 }
