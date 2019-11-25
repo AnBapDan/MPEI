@@ -22,9 +22,7 @@ public class LoadData {
 				}
 				
 				Produto p = new Produto(Integer.parseInt(d[0]),type,Integer.parseInt(d[2]));
-
 				Utilizador a = new Utilizador(tmp[0]);
-				
 				BloomFilter.add(a,p);
 			}
 		}
