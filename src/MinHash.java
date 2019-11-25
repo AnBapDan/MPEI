@@ -1,32 +1,26 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MinHash {
+	private HashMap<Utilizador,ArrayList<Produto>> intern;
+	private String n;
 	
-	private double threshold;
-	private int numusers;
-	
-	public MinHash(double threshold) {
-		this.threshold= threshold;
-		this.numusers = Utilizador.size();//numero  de utilizadores aparentemente unicos
+	public MinHash() {
+		intern = BloomFilter.getListagem();
+
+		
 		
 	}
 	
-	
-	public static void main() {			
+	public double similarity() {
+		double value =0;
+		for(int i=0 ; i<intern.size() & intern.containsKey(i); i++) {
 			
+		}
 		
+		
+		return value;
 	}
-	
-	private  double[][] getMatrix() {
-		
-		
-		
-		
-		
-		
-		return null;
-	}
-	
-	
 	
 	
 	
