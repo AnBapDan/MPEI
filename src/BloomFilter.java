@@ -12,26 +12,6 @@ public class BloomFilter {
 		listagem = new HashMap<Utilizador,ArrayList<Produto>>();  //Hashmap com todas as compras (Utilizador - Produto)
 	}
 	
-	private static int hash1() {
-		return 0;
-	}
-	
-	private static int hash2() {
-		return 0;
-	}
-	
-	private static int hash3() {
-		return 0;
-	}
-	
-	private static int hash4() {
-		return 0;
-	}
-	
-	private static int hash5() {
-		return 0;
-	}
-	
 	public static void add(Utilizador u, Produto p) {
 		if(!(exists(u,p))) {
 			if(listagem.containsKey(u)) {
@@ -48,20 +28,8 @@ public class BloomFilter {
 		}
 	}
 	
-	public static boolean userExists(Utilizador u) {
-		return false;
-	}
-	
-	public static boolean productExists(Produto p) {
-		return false;
-	}
-	
 	public static boolean exists(Utilizador u, Produto p) {
-		if(hash1() == 0 && hash2() == 0 && hash3() == 0 && hash4() == 0 && hash5() == 0) {
-			return false;
-		} else {
-			return true;
-		}
+		return false;
 	}
 
 	public static HashMap<Utilizador,ArrayList<Produto>> getListagem() {
