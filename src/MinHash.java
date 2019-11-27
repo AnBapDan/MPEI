@@ -2,26 +2,19 @@ public class MinHash {
 	//TODO run all the products of each list through the same hash with the same parameters, retrieving the min of them all (minhash)
 	private int[][] mins; 		//matrix
 	private int k;				//k= number of hashfunctions
-	private int nl;				//nl = number of lists
+	private int nl=1000;		//nl = number of lists(default 1000)
 	private int hashprod;		//hashprod id 
 	private int a,b,p,M,x = 0;	//intern variables
 	private int[] prime= {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
-	
-	public MinHash(int nh, int nl,) {
-		
-		this.nl = nl;
-		this.k = nh;
-		this.hashprod=hashprod;
 
-		mins = new int[k][nl];
+	public MinHash() {
+		mins = new int[k][nl];							//TODO receber a string, dar split no \t, usar o primeiro parametro-1 para substituir em user e o segundo é o hashprod
 		for(int i =0; i<k; i++) {
-			for(int j=0; j<nl; j++) {
-				for(int w =0; w<)
-				mins[i][j]=minhashf(hashprod);				//fill the matrix with the minhash of each product
-			}
-			x=0;a=0;										//Reset after row ended
+			mins[i][user]=minhashf(hashprod);				//fill the matrix with the minhash of each product
 		}
+		x=0;a=0;										//Reset after row ended
 	}
+
 
 	private int minhashf(int hashprod) {					//switches between to types of hash functions
 		if(x==0) {											//Need to reset after row
@@ -29,11 +22,11 @@ public class MinHash {
 		}
 
 		switch(x) {
-			case 1: 
-				return hash1(hashprod);						//Carter Wegman Hash Function
-				
-			case 2:
-				return hash2(hashprod);						//
+		case 1: 
+			return hash1(hashprod);						//Carter Wegman Hash Function
+
+		case 2:
+			return hash2(hashprod);						//
 		}
 		return 0;
 	}
