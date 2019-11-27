@@ -2,11 +2,12 @@ public class MinHash {
 	//TODO run all the products of each list through the same hash with the same parameters, retrieving the min of them all (minhash)
 	private int[][] mins; 		//matrix
 	private int k;				//k= number of hashfunctions
-	private int nl;				//np = number of lists
+	private int nl;				//nl = number of lists
 	private int hashprod;		//hashprod id 
 	private int a,b,p,M,x = 0;	//intern variables
 	private int[] prime= {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
-	public MinHash(int nh, int nl) {
+	
+	public MinHash(int nh, int nl,) {
 		
 		this.nl = nl;
 		this.k = nh;
@@ -15,6 +16,7 @@ public class MinHash {
 		mins = new int[k][nl];
 		for(int i =0; i<k; i++) {
 			for(int j=0; j<nl; j++) {
+				for(int w =0; w<)
 				mins[i][j]=minhashf(hashprod);				//fill the matrix with the minhash of each product
 			}
 			x=0;a=0;										//Reset after row ended
