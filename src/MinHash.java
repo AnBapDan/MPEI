@@ -3,7 +3,7 @@ import java.util.*;
 public class MinHash {		
 	//TODO run all the products of each list through the same hash with the same parameters, retrieving the min of them all (minhash)
 	private int[][] mins; 		//matrix
-	private int k;				//k= number of hashfunctions
+	private int k=10;				//k= number of hashfunctions
 	private int nl=1000;		//nl = number of lists(default 1000)
 	private int hashprod;		//hashprod id 
 	private int a,b,p,M,x = 0;	//intern variables
