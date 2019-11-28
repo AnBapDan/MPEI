@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class MinHash {		
 	//TODO run all the products of each list through the same hash with the same parameters, retrieving the min of them all (minhash)
 	private int[][] mins; 		//matrix
@@ -6,19 +8,32 @@ public class MinHash {
 	private int hashprod;		//hashprod id 
 	private int a,b,p,M,x = 0;	//intern variables
 	private int[] prime= {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
-
-	public MinHash() {
+	private List<String> lines;
+	public MinHash(List<String> lines) {
 		mins = new int[k][nl];							//TODO receber a string, dar split no \t, usar o primeiro parametro-1 para substituir em user e o segundo é o hashprod
-		for(int i =0; i<k; i++) {
-			mins[i][user]=minhashf(hashprod);				//fill the matrix with the minhash of each product
-		}
-		x=0;a=0;										//Reset after row ended
+		this.lines = lines;
+		hashes();
 	}
 
 
+
+	private int[][] hashes(){
+		for(int i =0; i<k; i++) {
+			for(int j=0; j<lines.size();j++) {
+				String a= lines.get(j);
+				String[]b = a.split("\t");
+				this.hashprod=Integer.parseInt(b[1]);
+				mins[i][Integer.parseInt(b[0])-1]=minhashf(hashprod);			//fill the matrix with the minhash of each product
+			}
+			x=0;a=0;										//Reset after row ended
+		}
+		return mins;
+	}
+
 	private int minhashf(int hashprod) {					//switches between to types of hash functions
 		if(x==0) {											//Need to reset after row
-			x = (int) ((Math.random()*2)+1);	
+			//x = (int) ((Math.random()*2)+1);	
+			x=1;
 		}
 
 		switch(x) {
