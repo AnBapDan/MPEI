@@ -15,6 +15,7 @@ public class MinHash {
 	
 	public MinHash(List<String> lines) {
 		mins = new long[k][nl];							//TODO receber a string, dar split no \t, usar o primeiro parametro-1 para substituir em user e o segundo é o hashprod
+		sets= new ArrayList<Set<Long>>();
 		this.lines = lines;
 		hashes();
 		longersection();
