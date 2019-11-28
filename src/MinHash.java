@@ -35,14 +35,12 @@ public class MinHash {
 			listofsets.add(tmp);
 		}
 		
-		
-		
 	}
 	
 	private void getMinHashMatrix(){
 		for(int i=0; i<nl;i++) {
 			for(int j=i+1; j<nl;j++) {
-				matrix[i][j]=1-similarity(i,j);
+				matrix[i][j]=similarity(i,j);
 			}
 		}
 	}
