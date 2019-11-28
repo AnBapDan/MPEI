@@ -17,18 +17,24 @@ public class MinHash {
 
 
 
-	private int[][] hashes(){
+	private void hashes(){
 		for(int i =0; i<k; i++) {
 			for(int j=0; j<lines.size();j++) {
 				String arg= lines.get(j);
 				String[]b = arg.split("\t");
+				int user =Integer.parseInt(b[0])-1;
 				this.hashprod=Integer.parseInt(b[1]);
-				mins[i][Integer.parseInt(b[0])-1]=minhashf(hashprod);			//fill the matrix with the minhash of each product
-				//System.out.println("hashes");
+				int code = minhashf(hashprod);
+				if(mins[i][user]==0) {
+					mins[i][user]=code;			//fill the matrix with the minhash of each product
+				}else {
+					if(mins[i][user]>code) {
+						mins[i][user]=code;
+					}
+				}
 			}
 			x=0;a=0;										//Reset after row ended
 		}
-		return mins;
 	}
 
 	private int minhashf(int hashprod) {					//switches between to types of hash functions
@@ -52,7 +58,6 @@ public class MinHash {
 	private int hash1(int hashprod) {						// Carter Wegman
 		int tmp=0;	
 		if(a==0) {											//Need to reset after row
-			System.out.println("hashes62555581");
 			a= (int) (Math.random()*20)+1;
 			b= (int) (Math.random()*20)+1;
 			tmp = (int) (Math.random()*11)+1;
