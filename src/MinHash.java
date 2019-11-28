@@ -11,34 +11,54 @@ public class MinHash {
 	private static int x,p=0;
 	private int[] prime= {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
 	private List<String> lines;
-	private List<Set<Long>> sets;
+	private List<Set<Long>> listofsets;
 	
 	public MinHash(List<String> lines) {
 		mins = new long[k][nl];							//TODO receber a string, dar split no \t, usar o primeiro parametro-1 para substituir em user e o segundo é o hashprod
-		sets= new ArrayList<Set<Long>>();
+		listofsets= new ArrayList<Set<Long>>();
 		this.lines = lines;
 		hashes();
-		longersection();
+		createSets();
 	}
 
 
 
-	private void longersection() {
+	private void createSets() {
 		for(int i=0; i<nl; i++) {		//search row
 			Set<Long> tmp = new HashSet<>();
 			for(int j=0; j<k; j++) {	//search column
 				long tmp1= mins[j][i];
 				tmp.add(tmp1);
 			}
-			sets.add(tmp);
+			listofsets.add(tmp);
 		}
 		
 		
 		
 	}
-
-
-
+	
+	private double[][] getMinHasMatrix(){
+		double[][]matrix=new double[nl][nl];
+		for(int i=0; i<nl;i++) {
+			for(int j=i+1; j<nl;j++) {
+				matrix[i][j]=1-similarity(i,j);
+			}
+		}
+		
+		return matrix;
+	}
+	
+	private double similarity(int i, int j) {
+		double similarity=0;
+		Set<Long>a=listofsets.get(i);
+		Set<Long>b=listofsets.get(j);
+		Set<Long>c = new HashSet<Long>(a);
+		c.retainAll(b);
+		double intersection = c.size();
+		similarity = intersection/(a.size()+b.size()-intersection);
+		return similarity;
+	}
+	
 	private void hashes(){
 		for(int i =0; i<k; i++) {
 			for(int j=0; j<lines.size();j++) {
