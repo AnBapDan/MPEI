@@ -2,17 +2,37 @@ import java.util.*;
 
 public class MinHash {		
 	//TODO run all the products of each list through the same hash with the same parameters, retrieving the min of them all (minhash)
-	private int[][] mins; 		//matrix
+	private long[][] mins; 		//matrix
 	private int k=10;				//k= number of hashfunctions
 	private int nl=1000;		//nl = number of lists(default 1000)
-	private int hashprod;		//hashprod id 
-	private static int a,b,p,M,x = 0;	//intern variables
+	private long hashprod;		//hashprod id 
+	private static long a,b=0;	//longer variables
+	private static final int M= 38327;
+	private static int x,p=0;
 	private int[] prime= {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
 	private List<String> lines;
+	private List<Set<Long>> sets;
+	
 	public MinHash(List<String> lines) {
-		mins = new int[k][nl];							//TODO receber a string, dar split no \t, usar o primeiro parametro-1 para substituir em user e o segundo é o hashprod
+		mins = new long[k][nl];							//TODO receber a string, dar split no \t, usar o primeiro parametro-1 para substituir em user e o segundo é o hashprod
 		this.lines = lines;
 		hashes();
+		longersection();
+	}
+
+
+
+	private void longersection() {
+		for(int i=0; i<nl; i++) {		//search row
+			Set<Long> tmp = new HashSet<>();
+			for(int j=0; j<k; j++) {	//search column
+				tmp.add(mins[i][j]);
+			}
+			sets.add(tmp);
+		}
+		
+		
+		
 	}
 
 
@@ -24,7 +44,7 @@ public class MinHash {
 				String[]b = arg.split("\t");
 				int user =Integer.parseInt(b[0])-1;
 				this.hashprod=Integer.parseInt(b[1]);
-				int code = minhashf(hashprod);
+				long code = minhashf(hashprod);
 				if(mins[i][user]==0) {
 					mins[i][user]=code;			//fill the matrix with the minhash of each product
 				}else {
@@ -37,15 +57,15 @@ public class MinHash {
 		}
 	}
 
-	private int minhashf(int hashprod) {					//switches between to types of hash functions
+	private long minhashf(long hashprod) {					//switches between to types of hash functions
 		if(x==0) {											//Need to reset after row
-			//x = (int) ((Math.random()*2)+1);	
+			//x = (long) ((Math.random()*2)+1);	
 			x=1;
 		}
 
 		switch(x) {
 		case 1: 
-			//	System.out.println("case1");
+			//	System.out.prlongln("case1");
 			return hash1(hashprod);						//Carter Wegman Hash Function
 
 		case 2:
@@ -55,16 +75,16 @@ public class MinHash {
 	}
 
 
-	private int hash1(int hashprod) {						// Carter Wegman
+	private long hash1(long hashprod) {						// Carter Wegman
 		int tmp=0;	
 		if(a==0) {											//Need to reset after row
-			a= (int) (Math.random()*20)+1;
-			b= (int) (Math.random()*20)+1;
+			a= (long) (Math.random()*2567257)+1;
+			b= (long) (Math.random()*20382548)+1;
 			tmp = (int) (Math.random()*11)+1;
-			M = prime[tmp-1];
+			//M = prime[tmp-1];
 			try {
 				p= (int)(Math.random()*3)+1;	
-				p= prime[tmp+p-1];
+				p= prime[3+p-1];
 			}
 			catch(Exception e) {p=prime[prime.length-1];}	//if tmp+p-1 is bigger than the array prime,it chooses the last index
 		}
@@ -74,12 +94,12 @@ public class MinHash {
 		return -1;											//error code										
 	}
 
-	private int hash2(int hashprod2) {
+	private long hash2(long hashprod2) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int[][] getMins() {
+	public long[][] getMins() {
 		return mins;
 	}
 
