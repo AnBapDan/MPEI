@@ -27,7 +27,7 @@ public class MinHash {
 		for(int i=0; i<nl; i++) {		//search row
 			Set<Long> tmp = new HashSet<>();
 			for(int j=0; j<k; j++) {	//search column
-				long tmp1= mins[i][j];
+				long tmp1= mins[j][i];
 				tmp.add(tmp1);
 			}
 			sets.add(tmp);
