@@ -20,6 +20,7 @@ public class MinHash {
 		this.lines = lines;
 		hashes();
 		createSets();
+		getMinHashMatrix();
 	}
 
 
@@ -38,14 +39,12 @@ public class MinHash {
 		
 	}
 	
-	private double[][] getMinHasMatrix(){
+	private void getMinHashMatrix(){
 		for(int i=0; i<nl;i++) {
 			for(int j=i+1; j<nl;j++) {
 				matrix[i][j]=1-similarity(i,j);
 			}
 		}
-		
-		return matrix;
 	}
 	
 	
