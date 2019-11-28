@@ -22,7 +22,6 @@ public class testMinHash {
 			}
 			System.out.println();
 		}
-	
 	}
 
 }
