@@ -10,17 +10,19 @@ public class testMinHash {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		Path f = Paths.get("src/db.txt");
+		Path f = Paths.get("src/testMH.txt");
 		Scanner scf = new Scanner(f);
 		List<String> lines = Files.readAllLines(f);
 		MinHash mh = new MinHash(lines);
 		
 		int[][] tmp = mh.getMins();
-		for(int i = 0; i < 10; i++) {
-			for(int j = 0; j < 1000; j++) {
-				System.out.println(tmp[i][j]);
+		for(int i = 0; i < 50; i++) {
+			for(int j = 0; j < 3; j++) {
+				System.out.print(tmp[i][j]+" ");
 			}
+			System.out.println();
 		}
+	
 	}
 
 }

@@ -18,28 +18,5 @@ public class Main {
 		Scanner scf = new Scanner(f);
 		List<String> lines = Files.readAllLines(f);
 		MinHash mh = new MinHash(lines);
-		
-		
-//		List<String> list = Files.readAllLines(f);
-//		Iterator<String> it = list.iterator();
-//		int user,prod;
-//		List<Object> users = new ArrayList<Object>(1000);
-
-//		while(it.hasNext()) {
-//			String[] t = it.next().split("\t");
-//			user = Integer.parseInt(t[0]);
-//			prod = Integer.parseInt(t[1]);
-//			try {
-//				ArrayList<Integer> tmp = new ArrayList<Integer>(100);	
-//				tmp.addAll((Collection<? extends Integer>) users.get(user-1));
-//				tmp.add(prod);
-//				users.add(user-1,tmp);				
-//			}catch(Exception e) {
-//				ArrayList<Integer> tmp = new ArrayList<Integer>(100);
-//				tmp.add(prod);
-//				users.add(user-1,tmp);	
-//			}
-//
-//		}
 	}
 }
