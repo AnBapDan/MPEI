@@ -6,7 +6,7 @@ public class MinHash {
 	private int k=10;				//k= number of hashfunctions
 	private int nl=1000;		//nl = number of lists(default 1000)
 	private int hashprod;		//hashprod id 
-	private int a,b,p,M,x = 0;	//intern variables
+	private static int a,b,p,M,x = 0;	//intern variables
 	private int[] prime= {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
 	private List<String> lines;
 	public MinHash(List<String> lines) {
@@ -20,10 +20,11 @@ public class MinHash {
 	private int[][] hashes(){
 		for(int i =0; i<k; i++) {
 			for(int j=0; j<lines.size();j++) {
-				String a= lines.get(j);
-				String[]b = a.split("\t");
+				String arg= lines.get(j);
+				String[]b = arg.split("\t");
 				this.hashprod=Integer.parseInt(b[1]);
 				mins[i][Integer.parseInt(b[0])-1]=minhashf(hashprod);			//fill the matrix with the minhash of each product
+				//System.out.println("hashes");
 			}
 			x=0;a=0;										//Reset after row ended
 		}
@@ -38,6 +39,7 @@ public class MinHash {
 
 		switch(x) {
 		case 1: 
+			//	System.out.println("case1");
 			return hash1(hashprod);						//Carter Wegman Hash Function
 
 		case 2:
@@ -50,6 +52,7 @@ public class MinHash {
 	private int hash1(int hashprod) {						// Carter Wegman
 		int tmp=0;	
 		if(a==0) {											//Need to reset after row
+			System.out.println("hashes62555581");
 			a= (int) (Math.random()*20)+1;
 			b= (int) (Math.random()*20)+1;
 			tmp = (int) (Math.random()*11)+1;
@@ -59,12 +62,11 @@ public class MinHash {
 				p= prime[tmp+p-1];
 			}
 			catch(Exception e) {p=prime[prime.length-1];}	//if tmp+p-1 is bigger than the array prime,it chooses the last index
-
-			if(a!=0 & b!= 0 & p!=0 & M!=0) {
-				return(((a*hashprod+b) % p )% M);			//ℎ𝑎,𝑏(𝑥)=((𝑎𝑥+𝑏)𝑚𝑜𝑑𝑝)𝑚𝑜𝑑𝑀;
-			}
 		}
-		return -1;											
+		if(a!=0 & b!= 0 & p!=0 & M!=0) {
+			return(((a*hashprod+b) % p )% M);				//ℎ𝑎,𝑏(𝑥)=((𝑎𝑥+𝑏)𝑚𝑜𝑑𝑝)𝑚𝑜𝑑𝑀;
+		}
+		return -1;											//error code										
 	}
 
 	private int hash2(int hashprod2) {
@@ -75,7 +77,7 @@ public class MinHash {
 	public int[][] getMins() {
 		return mins;
 	}
-	
-	
-	
+
+
+
 }

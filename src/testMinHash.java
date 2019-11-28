@@ -16,7 +16,7 @@ public class testMinHash {
 		MinHash mh = new MinHash(lines);
 		
 		int[][] tmp = mh.getMins();
-		for(int i = 0; i < 1000; i++) {
+		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 1000; j++) {
 				System.out.println(tmp[i][j]);
 			}
