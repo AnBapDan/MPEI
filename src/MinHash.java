@@ -71,4 +71,11 @@ public class MinHash {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	public int[][] getMins() {
+		return mins;
+	}
+	
+	
+	
 }
