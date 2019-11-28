@@ -23,8 +23,6 @@ public class MinHash {
 		getMinHashMatrix();
 	}
 
-
-
 	private void createSets() {
 		for(int i=0; i<nl; i++) {		//search row
 			Set<Long> tmp = new HashSet<>();
@@ -33,8 +31,7 @@ public class MinHash {
 				tmp.add(tmp1);
 			}
 			listofsets.add(tmp);
-		}
-		
+		}	
 	}
 	
 	private void getMinHashMatrix(){
@@ -44,8 +41,7 @@ public class MinHash {
 			}
 		}
 	}
-	
-	
+		
 	private double similarity(int i, int j) {
 		double similarity=0;
 		Set<Long>a=listofsets.get(i);
@@ -82,7 +78,6 @@ public class MinHash {
 			//x = (long) ((Math.random()*2)+1);	
 			x=1;
 		}
-
 		switch(x) {
 		case 1: 
 			//	System.out.prlongln("case1");
@@ -118,15 +113,23 @@ public class MinHash {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	/*Getters and Setters*/
 	public long[][] getMins() {
 		return mins;
 	}
 
-
-
 	public double[][] getMatrix() {
 		return matrix;
+	}
+
+	
+	public int getNl() {
+		return nl;
+	}
+
+	public void setNl(int nl) {
+		this.nl = nl;
 	}
 	
 
