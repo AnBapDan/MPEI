@@ -12,6 +12,7 @@ public class MinHash {
 	private int[] prime= {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
 	private List<String> lines;
 	private List<Set<Long>> listofsets;
+	private double[][]matrix=new double[nl][nl];
 	
 	public MinHash(List<String> lines) {
 		mins = new long[k][nl];							//TODO receber a string, dar split no \t, usar o primeiro parametro-1 para substituir em user e o segundo é o hashprod
@@ -38,7 +39,6 @@ public class MinHash {
 	}
 	
 	private double[][] getMinHasMatrix(){
-		double[][]matrix=new double[nl][nl];
 		for(int i=0; i<nl;i++) {
 			for(int j=i+1; j<nl;j++) {
 				matrix[i][j]=1-similarity(i,j);
@@ -47,6 +47,7 @@ public class MinHash {
 		
 		return matrix;
 	}
+	
 	
 	private double similarity(int i, int j) {
 		double similarity=0;
@@ -125,6 +126,12 @@ public class MinHash {
 		return mins;
 	}
 
+
+
+	public double[][] getMatrix() {
+		return matrix;
+	}
+	
 
 
 }
