@@ -13,13 +13,11 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		
 		BloomFilter bf = new BloomFilter();
-		MinHash mh = new MinHash();
-		
 		
 		Path f = Paths.get("src/db.txt");
 		Scanner scf = new Scanner(f);
-		while(scf.hasNextLine())
-			mh.newline(scf.nextLine());
+		List<String> lines = Files.readAllLines(f);
+		MinHash mh = new MinHash(lines);
 		
 		
 //		List<String> list = Files.readAllLines(f);
