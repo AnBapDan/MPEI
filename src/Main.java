@@ -21,6 +21,7 @@ public class Main {
 		while(scf.hasNextLine())
 			mh.newline(scf.nextLine());
 		
+		
 //		List<String> list = Files.readAllLines(f);
 //		Iterator<String> it = list.iterator();
 //		int user,prod;
