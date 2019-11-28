@@ -78,15 +78,15 @@ public class MinHash {
 	private long hash1(long hashprod) {						// Carter Wegman
 		int tmp=0;	
 		if(a==0) {											//Need to reset after row
-			a= (long) (Math.random()*2567257)+1;
-			b= (long) (Math.random()*20382548)+1;
-			tmp = (int) (Math.random()*11)+1;
-			//M = prime[tmp-1];
 			try {
 				p= (int)(Math.random()*3)+1;	
 				p= prime[3+p-1];
 			}
 			catch(Exception e) {p=prime[prime.length-1];}	//if tmp+p-1 is bigger than the array prime,it chooses the last index
+			a= (long) (Math.random()*p)+1;
+			b= (long) (Math.random()*p)+1;
+			tmp = (int) (Math.random()*11)+1;
+			//M = prime[tmp-1];
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
 			return(((a*hashprod+b) % p )% M);				//ℎ𝑎,𝑏(𝑥)=((𝑎𝑥+𝑏)𝑚𝑜𝑑𝑝)𝑚𝑜𝑑𝑀;
