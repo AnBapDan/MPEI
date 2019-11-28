@@ -15,7 +15,7 @@ public class testMinHash {
 		List<String> lines = Files.readAllLines(f);
 		MinHash mh = new MinHash(lines);
 		
-		int[][] tmp = mh.getMins();
+		long[][] tmp = mh.getMins();
 		for(int i = 0; i < 50; i++) {
 			for(int j = 0; j < 3; j++) {
 				System.out.print(tmp[i][j]+" ");
