@@ -40,7 +40,7 @@ public class MinHash {
 	private void getMinHashMatrix(){
 		for(int i=0; i<nl;i++) {
 			for(int j=i+1; j<nl;j++) {
-				matrix[i][j]=similarity(i,j);
+				matrix[i][j]=Math.round(similarity(i,j)*10)/10;
 			}
 		}
 	}
