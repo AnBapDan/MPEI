@@ -1,17 +1,13 @@
  
 public class BloomFilter {
 
-	private int[] bloom;
+	private static int[] bloom = new int[80000];
 	private static int[] prime = {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};
 	private static long a, b = 0;
 	private static int p = 0;
 	private static final int M = 38327;
 	
-	public BloomFilter() {
-		bloom = new int[80000];
-	}
-	
-	public void add(int u, int p) {
+	public static void add(int u, int p) {
 		int hashCode = hash(u,p);
 		int[] hashes = {hash(u,p),hash(u,p),hash(u,p),hash(u,p),hash(u,p)};
 		boolean bol = exists(u,p,hashes);
@@ -24,7 +20,7 @@ public class BloomFilter {
 		
 	}
 	
-	private boolean exists(int u, int p, int[] hashes) {  //h1(1) = mod(sum(str(1,:).*h(1:),M);  M = 1009; h = randi(100,M,3); str = ('ola','ela','ele','ggg');
+	private static boolean exists(int u, int p, int[] hashes) {  //h1(1) = mod(sum(str(1,:).*h(1:),M);  M = 1009; h = randi(100,M,3); str = ('ola','ela','ele','ggg');
 		for(int i : hashes) {
 			if(bloom[i] == 0) {
 				return false;
@@ -33,7 +29,7 @@ public class BloomFilter {
 		return true;
 	}
 
-	private int hash(long user, long hashprod) {													// Carter Wegman	
+	private static int hash(long user, long hashprod) {													// Carter Wegman	
 		int tmp = 0;
 		if(a==0) {																					//Needs to be reseted after each row
 			try {
