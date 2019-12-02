@@ -10,15 +10,17 @@ public class testBloom {
 	public static void main(String[] args) throws IOException {
 
 		BloomFilter b = new BloomFilter();
-		Path f = Paths.get("src/db.txt");
+		Path f = Paths.get("src/testbloom.txt");
 		Scanner scf = new Scanner(f);
 		List<String> lines = Files.readAllLines(f);
 		
 		for(int i = 0; i < lines.size(); i++) {
 			String [] split = lines.get(i).split("\t");
-			b.add(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+			int user = Integer.parseInt(split[0]);
+			int prod = Integer.parseInt(split[1]);
+			b.add(user,prod);
 		}
-		
+		scf.close();
 	}
 
 }
