@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class MinHash {		
-	//TODO run all the products of each list through the same hash with the same parameters, retrieving the min of them all (minhash)
 	private long[][] mins; 																			//matrix
 	private int k=50;																				//k= number of hashfunctions
 	private int nl=500;																				//nl = number of lists(default 1000)
@@ -83,7 +82,7 @@ public class MinHash {
 			return hash1(hashprod);																	//Carter Wegman Hash Function
 
 		case 2:
-			return hash2(hashprod);																	//TODO
+			return hash2(hashprod);															
 		}
 		return 0;
 	}
@@ -122,7 +121,7 @@ public class MinHash {
 			//M = prime[tmp-1];
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
-			return Math.abs(((a-hashprod*b) % M )% p);														//ℎ𝑎,𝑏(𝑥)=((𝑎𝑥+𝑏)𝑚𝑜𝑑𝑝)𝑚𝑜𝑑𝑀;
+			return Math.abs(((a-hashprod*b) % M )% p);														//ℎ𝑎,𝑏(𝑥)=|((𝑎-𝑥*𝑏)𝑚𝑜𝑑M)𝑚𝑜𝑑p|;
 		}
 		return -1;	
 	}
