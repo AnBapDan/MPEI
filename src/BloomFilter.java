@@ -13,7 +13,7 @@ public class BloomFilter {
 	
 	public void add(int u, int p) {
 		int hashCode = hash(u,p);
-		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p).hash4(u,p),hash5(u,p)};
+		int[] hashes = {hash(u,p),hash(u,p),hash(u,p),hash(u,p),hash(u,p)};
 		boolean bol = exists(u,p,hashes);
 		if(bol) {
 			System.out.println("Already exists");
