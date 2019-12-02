@@ -76,8 +76,7 @@ public class MinHash {
 
 	private long minhashf(long hashprod) {															//switches between to types of hash functions
 		if(x==0) {																					//Needs to be reseted after each row
-			//x = (long) ((Math.random()*2)+1);														//TODO
-			x=1;
+			x = (int) ((Math.random()*2)+1);														//TODO
 		}
 		switch(x) {
 		case 1: 
@@ -109,9 +108,23 @@ public class MinHash {
 		return -1;																					//error code										
 	}
 
-	private long hash2(long hashprod2) {
-		// TODO Auto-generated method stub
-		return 0;
+	private long hash2(long hashprod) {
+		int tmp=0;	
+		if(a==0) {																					//Needs to be reseted after each row
+			try {
+				p= (int)(Math.random()*3)+1;	
+				p= prime[3+p-1];																	//tries to copy the prime number of the array
+			}
+			catch(Exception e) {p=prime[prime.length-1];}											//if tmp+p-1 is bigger than the array prime,it chooses the last index
+			a= (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
+			b= (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
+			tmp = (int) (Math.random()*11)+1;														//generates a number between 1 11
+			//M = prime[tmp-1];
+		}
+		if(a!=0 & b!= 0 & p!=0 & M!=0) {
+			return Math.abs(((a-hashprod*b) % M )% p);														//ℎ𝑎,𝑏(𝑥)=((𝑎𝑥+𝑏)𝑚𝑜𝑑𝑝)𝑚𝑜𝑑𝑀;
+		}
+		return -1;	
 	}
 	
 	/*Getters and Setters*/
@@ -132,6 +145,4 @@ public class MinHash {
 		this.nl = nl;
 	}
 	
-
-
 }
