@@ -17,10 +17,9 @@ public class Main {
 		Path f = Paths.get("src/db.txt");
 		Scanner scf = new Scanner(f);
 		List<String> lines = Files.readAllLines(f);
-		int n =lines.size();										//number of elements
-		double p = 0.01;											// % of false positives
-		int m = (int)((-n*Math.log(p))/(Math.log(2)*Math.log(2)));	//number of bits needed
-		int k = (int) (m/(n*Math.log(2)));
+		int n = lines.size(); //number of elements
+		int m = n * 8; 		  //number of bits of the array
+		int k = (int) ((m*Math.log(2))/n);
 		System.out.println(n);
 		System.out.println(m);
 		System.out.print(k);

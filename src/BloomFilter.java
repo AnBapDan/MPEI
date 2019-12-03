@@ -1,13 +1,18 @@
  
 public class BloomFilter {
 
-	private static int[] bloom = new int[80000];
+	private int[] bloom;
 	private static int[] prime = {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};
 	private static long a, b = 0;
 	private static int p = 0;
 	private static final int M = 38327;
 	
-	public static void add(int u, int p) {
+	
+	public BloomFilter(int n) {
+		bloom = new int[n*8];
+	}
+	
+	public void add(int u, int p) {
 		
 		int[] hashes = {hash1(u,p),hash2(u,p)};
 		boolean bol = exists(u,p,hashes);
@@ -17,11 +22,10 @@ public class BloomFilter {
 			System.out.println("Added");
 			bloom[hashes[0]] = 1;
 			bloom[hashes[1]] = 1;
-		}
-		
+		}	
 	}
 	
-	private static boolean exists(int u, int p, int[] hashes) {
+	private boolean exists(int u, int p, int[] hashes) {
 		for(int i : hashes) {
 			if(bloom[i] == 0) {
 				return false;
@@ -30,7 +34,7 @@ public class BloomFilter {
 		return true;
 	}
 
-	private static int hash1(long hashuser, long hashprod) {										// Carter Wegman	
+	private int hash1(long hashuser, long hashprod) {										// Carter Wegman	
 //		int tmp = 0;
 		if(a==0) {																					//Needs to be reseted after each row
 			try {
@@ -50,7 +54,7 @@ public class BloomFilter {
 		return -1;																					//error code										
 	}
 	
-	private static int hash2(long hashuser,long hashprod) {
+	private int hash2(long hashuser,long hashprod) {
 //		int tmp=0;	
 		if(a==0) {																					//Needs to be reseted after each row
 			try {

@@ -5,6 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -22,6 +26,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem menuitem2;
 	private JMenuItem quit;
 	private ActionListener a1;
+	private BloomFilter bf;
 	
 	public MainFrame() {
 		super("Habitos de Compras");
@@ -30,6 +35,7 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		content = new JPanel();
 		content.setBackground(Color.GRAY);
+		bf = new BloomFilter(10000);
 		a1 = new ActionListener() {
 
 			@Override
@@ -62,7 +68,7 @@ public class MainFrame extends JFrame {
 		content.add(panel);
 		menubar = new JMenuBar();
 		menu = new JMenu("Menu");
-		menuitem1 = new JMenuItem("Gerar Base de Dados Aleatórios");
+		menuitem1 = new JMenuItem("Gerar Base de Dados Aleatorios");
 		menuitem1.addActionListener(a1);
 		menuitem2 = new JMenuItem("Adicionar Compra");
 		menuitem2.addActionListener(a1);
@@ -93,6 +99,12 @@ public class MainFrame extends JFrame {
 		JOptionPane.showMessageDialog(null, p);
 		int user = Integer.parseInt(field1.getText());
 		int prod = Integer.parseInt(field2.getText());
-		BloomFilter.add(user,prod);
+		bf.add(user,prod);
+	}
+	
+	public void readFile() throws IOException {
+		String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler");
+		Path p =  Paths.get(f);
+		List<String> lines = Files.readAllLines(p);
 	}
 }
