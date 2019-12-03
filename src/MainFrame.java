@@ -27,6 +27,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem quit;
 	private ActionListener a1;
 	private BloomFilter bf;
+	private	JMenuItem readFile;
 	
 	public MainFrame() {
 		super("Habitos de Compras");
@@ -35,7 +36,7 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		content = new JPanel();
 		content.setBackground(Color.GRAY);
-		bf = new BloomFilter(10000);
+		bf = new BloomFilter(10000);			 	//Por omissao serao 10000 compras
 		a1 = new ActionListener() {
 
 			@Override
@@ -54,6 +55,13 @@ public class MainFrame extends JFrame {
 				} else if(item == quit) {
 					int y = JOptionPane.showConfirmDialog(null, "Deseja mesmo sair?");
 					if(y == 0) System.exit(0);
+				} else if(item == readFile) {
+					try {
+						readFile();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		};
@@ -74,9 +82,12 @@ public class MainFrame extends JFrame {
 		menuitem2.addActionListener(a1);
 		quit = new JMenuItem("Sair");
 		quit.addActionListener(a1);
+		readFile = new JMenuItem("Ler novo ficheiro");
+		readFile.addActionListener(a1);
 		menu.add(menuitem1);
 		menu.add(menuitem2);
 		menu.add(quit);
+		menu.add(readFile);
 		menubar.add(menu);
 	}
 	
@@ -103,8 +114,16 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void readFile() throws IOException {
-		String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler");
-		Path p =  Paths.get(f);
-		List<String> lines = Files.readAllLines(p);
+		String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
+		Path file = Paths.get("src/"+f);
+		List<String> lines = Files.readAllLines(file);
+		BloomFilter b = new BloomFilter(lines.size());
+		for(int i = 0; i < lines.size(); i++) {
+			String [] split = lines.get(i).split("\t");
+			int user = Integer.parseInt(split[0]);
+			int prod = Integer.parseInt(split[1]);
+			b.add(user,prod);
+		}
+		System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
 	}
 }

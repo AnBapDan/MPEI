@@ -3,13 +3,18 @@ public class BloomFilter {
 
 	private int[] bloom;
 	private static int[] prime = {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};
-	private static long a, b = 0;
-	private static int p = 0;
+	private static long a, b;
+	private static int p;
 	private static final int M = 38327;
+	private int cont;
 	
 	
 	public BloomFilter(int n) {
 		bloom = new int[n*8];
+		a = 0;
+		b = 0;
+		p = 0;
+		cont = 0;
 	}
 	
 	public void add(int u, int p) {
@@ -18,6 +23,7 @@ public class BloomFilter {
 		boolean bol = exists(u,p,hashes);
 		if(bol) {
 			System.out.println("Already exists");
+			cont++;
 		} else {
 			System.out.println("Added");
 			bloom[hashes[0]] = 1;
@@ -26,12 +32,17 @@ public class BloomFilter {
 	}
 	
 	private boolean exists(int u, int p, int[] hashes) {
+		System.out.println("Checking if already exists...");
 		for(int i : hashes) {
 			if(bloom[i] == 0) {
 				return false;
 			}
 		}
 		return true;
+	}
+	
+	public int getCont() {
+		return cont;
 	}
 
 	private int hash1(long hashuser, long hashprod) {										// Carter Wegman	
