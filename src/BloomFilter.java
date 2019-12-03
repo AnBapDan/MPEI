@@ -58,9 +58,7 @@ public class BloomFilter {
 //			tmp = (int) (Math.random()*11)+1;														//generates a number between 1 1
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
-			int tmp = (int) (((a*hashprod+b*hashuser) % p )% 80000);
-			System.out.print(tmp + " ");
-			return tmp;
+			return (int) (((a*hashprod+b*hashuser) % p )% 80000);
 		}
 		return -1;																					//error code										
 	}
@@ -78,9 +76,7 @@ public class BloomFilter {
 //			tmp = (int) (Math.random()*11)+1;														//generates a number between 1 11
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
-			 int tmp = (int) Math.abs(((a*hashuser-hashprod*b) % M )% p);
-			 System.out.print(tmp+" ");
-			 return tmp;
+			 return (int) Math.abs(((a*hashuser-hashprod*b) % M )% p);
 		}
 		return -1;	
 	}
