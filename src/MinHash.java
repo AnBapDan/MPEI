@@ -75,14 +75,18 @@ public class MinHash {
 
 	private long minhashf(long hashprod) {															//switches between to types of hash functions
 		if(x==0) {																					//Needs to be reseted after each row
-			x = (int) ((Math.random()*2)+1);														//TODO
+			x = (int) ((Math.random()*3)+1);														//TODO
+			//x=3;
+			
 		}
 		switch(x) {
 		case 1: 
 			return hash1(hashprod);																	//Carter Wegman Hash Function
 
 		case 2:
-			return hash2(hashprod);															
+			return hash2(hashprod);		
+		case 3:
+			return hash3(hashprod);
 		}
 		return 0;
 	}
@@ -124,6 +128,23 @@ public class MinHash {
 			return Math.abs(((a-hashprod*b) % M )% p);														//ℎ𝑎,𝑏(𝑥)=|((𝑎-𝑥*𝑏)𝑚𝑜𝑑M)𝑚𝑜𝑑p|;
 		}
 		return -1;	
+	}
+	
+	private long hash3(long hashprod) {
+		if(a==0) {																					//Needs to be reseted after each row
+			try {
+				p= (int)(Math.random()*11)+1;	
+				p= prime[p-1];																	
+			}
+			catch(Exception e) {p=prime[prime.length-1];}											
+			a= (long) (Math.random()*p)+1;															
+			b= (long) (Math.random()*p)+1;																								
+		}
+		if(a!=0 & b!= 0 & p!=0) {
+			return (long) Math.abs(((hashprod*p*a)/Math.log(2)*b)%p);														
+		}
+		return -1;	
+		
 	}
 	
 	/*Getters and Setters*/
