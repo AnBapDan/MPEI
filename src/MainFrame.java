@@ -1,11 +1,10 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -64,15 +63,14 @@ public class MainFrame extends JFrame {
 				}
 			}
 		};
+		createMenuBar();
 		createContent();
 		setContentPane(content);
 		setJMenuBar(menubar);
 		setVisible(true);
 	}
 
-	public void createContent() {
-		JPanel panel = new JPanel(new BorderLayout());
-		content.add(panel);
+	private void createMenuBar() {
 		menubar = new JMenuBar();
 		menu = new JMenu("Menu");
 		menuitem1 = new JMenuItem("Gerar Base de Dados Aleatorios");
@@ -89,14 +87,14 @@ public class MainFrame extends JFrame {
 		menu.add(quit);
 		menubar.add(menu);
 	}
+	
+	private void createContent() {
+		
+	}
 
 	private void generateData() throws IOException {
 		String s = JOptionPane.showInputDialog(null, "Insira o ficheiro onde pretende escrever");
-		if(s.equals(null)) {
-			DatabaseGen db = new DatabaseGen();
-		} else {
-			DatabaseGen db = new DatabaseGen(new File(s));
-		}
+		DatabaseGen db = new DatabaseGen(s);
 		readFile(s);
 	}
 
@@ -127,9 +125,8 @@ public class MainFrame extends JFrame {
 			}
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
 		} else {
-			File file = new File("src/"+ficheiro);
-			if(file.exists()) {
-				Path fich = Paths.get("src/"+ficheiro);
+			Path fich = Paths.get("src/"+ficheiro);
+			if(Files.exists(fich, LinkOption.NOFOLLOW_LINKS)) {
 				List<String> lines = Files.readAllLines(fich);
 				BloomFilter b = new BloomFilter(lines.size());
 				for(int i = 0; i < lines.size(); i++) {
@@ -138,6 +135,8 @@ public class MainFrame extends JFrame {
 					int prod = Integer.parseInt(split[1]);
 					b.add(user,prod);
 				}
+				System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+
 			}
 		}
 	}

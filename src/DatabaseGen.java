@@ -17,15 +17,17 @@ public class DatabaseGen {
 		writer.close();
 	}
 
-	public DatabaseGen (File f) throws IOException{
-		
-		writer = new PrintWriter(f);
-		for(int i = 0; i< 10000; i++) {
-			int code = (int) ((Math.random()*100)+250); // Generates code numbers from 250-350 (100 products only)
-			int user = (int) ((Math.random()*500)+1);
-			writer.println(user+"\t"+code);
-			
-		}
-		writer.close();
+	public DatabaseGen (String s) throws IOException{
+		File f = new File("src/"+s);
+//		if(f.exists()) {
+			writer = new PrintWriter(f);
+			for(int i = 0; i< 10000; i++) {
+				int code = (int) ((Math.random()*100)+250); // Generates code numbers from 250-350 (100 products only)
+				int user = (int) ((Math.random()*500)+1);
+				writer.println(user+"\t"+code);
+				
+			}
+			writer.close();
+//		}
 	}
 }
