@@ -46,7 +46,6 @@ public class BloomFilter {
 	}
 
 	private int hash1(long hashuser, long hashprod) {										// Carter Wegman	
-//		int tmp = 0;
 		if(a==0) {																					//Needs to be reseted after each row
 			try {
 				p = (int)(Math.random()*3)+1;	
@@ -55,7 +54,6 @@ public class BloomFilter {
 			catch(Exception e) {p=prime[prime.length-1];}											//if tmp+p-1 is bigger than the array prime,it chooses the last index
 			a = (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
 			b = (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
-//			tmp = (int) (Math.random()*11)+1;														//generates a number between 1 1
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
 			return (int) (((a*hashprod+b*hashuser) % p )% 80000);
@@ -64,7 +62,6 @@ public class BloomFilter {
 	}
 	
 	private int hash2(long hashuser,long hashprod) {
-//		int tmp=0;	
 		if(a==0) {																					//Needs to be reseted after each row
 			try {
 				p= (int)(Math.random()*3)+1;	
@@ -73,7 +70,6 @@ public class BloomFilter {
 			catch(Exception e) {p=prime[prime.length-1];}											//if tmp+p-1 is bigger than the array prime,it chooses the last index
 			a= (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
 			b= (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
-//			tmp = (int) (Math.random()*11)+1;														//generates a number between 1 11
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
 			 return (int) Math.abs(((a*hashuser-hashprod*b) % M )% p);

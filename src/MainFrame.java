@@ -136,7 +136,6 @@ public class MainFrame extends JFrame {
 					b.add(user,prod);
 				}
 				System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
-
 			}
 		}
 	}
