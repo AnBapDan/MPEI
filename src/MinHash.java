@@ -75,8 +75,8 @@ public class MinHash {
 
 	private long minhashf(long hashprod) {															//switches between to types of hash functions
 		if(x == 0) {																					//Needs to be reseted after each row
-			x = (int) ((Math.random()*3)+1);														//TODO
-			//	x=4;
+			x = (int) ((Math.random()*5)+1);														//TODO
+			//x=1;
 		}
 		switch(x) {
 
@@ -91,6 +91,9 @@ public class MinHash {
 
 		case 4:
 			return hash4(hashprod);
+			
+		case 5:
+			return hash5(hashprod);
 		}
 		return 0;
 	}
@@ -166,6 +169,21 @@ public class MinHash {
 		return -1;
 	}
 
+	private long hash5(long hashprod) {
+		if(a == 0) {																					//Needs to be reseted after each row
+			try {
+				p = (int)(Math.random()*11)+1;	
+				p = prime[p-1];																	
+			}
+			catch(Exception e) {p=prime[prime.length-1];}											
+			a = (long) (Math.random()*p)+1;															
+			b = (long) (Math.random()*p)+1;																								
+		}
+		if(a != 0 & b != 0 & p !=0) {
+			return (long) Math.abs((Math.pow(a*hashprod,2)/Math.log(p))%b);														
+		}	
+		return -1;	
+	}
 
 	/*Getters and Setters*/
 	public long[][] getMins() {
