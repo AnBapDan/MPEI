@@ -18,6 +18,7 @@ public class DatabaseGen {
 	}
 
 	public DatabaseGen (File f) throws IOException{
+		
 		writer = new PrintWriter(f);
 		for(int i = 0; i< 10000; i++) {
 			int code = (int) ((Math.random()*100)+250); // Generates code numbers from 250-350 (100 products only)

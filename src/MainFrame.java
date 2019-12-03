@@ -13,7 +13,7 @@ import java.util.List;
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
-	
+
 	/**
 	 * 
 	 */
@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
 	private ActionListener a1;
 	private BloomFilter bf;
 	private	JMenuItem readFile;
-	
+
 	public MainFrame() {
 		super("Habitos de Compras");
 		setSize(800, 600);
@@ -41,7 +41,6 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				JMenuItem item = (JMenuItem) e.getSource();
 				if(item == menuitem1) {
 					try {
@@ -57,7 +56,7 @@ public class MainFrame extends JFrame {
 					if(y == 0) System.exit(0);
 				} else if(item == readFile) {
 					try {
-						readFile();
+						readFile("");
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -86,11 +85,11 @@ public class MainFrame extends JFrame {
 		readFile.addActionListener(a1);
 		menu.add(menuitem1);
 		menu.add(menuitem2);
-		menu.add(quit);
 		menu.add(readFile);
+		menu.add(quit);
 		menubar.add(menu);
 	}
-	
+
 	private void generateData() throws IOException {
 		String s = JOptionPane.showInputDialog(null, "Insira o ficheiro onde pretende escrever");
 		if(s.equals(null)) {
@@ -98,8 +97,9 @@ public class MainFrame extends JFrame {
 		} else {
 			DatabaseGen db = new DatabaseGen(new File(s));
 		}
+		readFile(s);
 	}
-	
+
 	private void addPurchase() {
 		JPanel p = new JPanel(new GridLayout(2,2));
 		JTextField field1 = new JTextField();
@@ -112,18 +112,33 @@ public class MainFrame extends JFrame {
 		int prod = Integer.parseInt(field2.getText());
 		bf.add(user,prod);
 	}
-	
-	public void readFile() throws IOException {
-		String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
-		Path file = Paths.get("src/"+f);
-		List<String> lines = Files.readAllLines(file);
-		BloomFilter b = new BloomFilter(lines.size());
-		for(int i = 0; i < lines.size(); i++) {
-			String [] split = lines.get(i).split("\t");
-			int user = Integer.parseInt(split[0]);
-			int prod = Integer.parseInt(split[1]);
-			b.add(user,prod);
+
+	public void readFile(String ficheiro) throws IOException {
+		if(ficheiro.equals("")) {
+			String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
+			Path file = Paths.get("src/"+f);
+			List<String> lines = Files.readAllLines(file);
+			BloomFilter b = new BloomFilter(lines.size());
+			for(int i = 0; i < lines.size(); i++) {
+				String [] split = lines.get(i).split("\t");
+				int user = Integer.parseInt(split[0]);
+				int prod = Integer.parseInt(split[1]);
+				b.add(user,prod);
+			}
+			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+		} else {
+			File file = new File("src/"+ficheiro);
+			if(file.exists()) {
+				Path fich = Paths.get("src/"+ficheiro);
+				List<String> lines = Files.readAllLines(fich);
+				BloomFilter b = new BloomFilter(lines.size());
+				for(int i = 0; i < lines.size(); i++) {
+					String [] split = lines.get(i).split("\t");
+					int user = Integer.parseInt(split[0]);
+					int prod = Integer.parseInt(split[1]);
+					b.add(user,prod);
+				}
+			}
 		}
-		System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
 	}
 }
