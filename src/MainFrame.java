@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -35,7 +37,12 @@ public class MainFrame extends JFrame {
 				
 				JMenuItem item = (JMenuItem) e.getSource();
 				if(item == menuitem1) {
-					generateData();
+					try {
+						generateData();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				} else if(item == menuitem2) {
 					addPurchase();
 				} else if(item == quit) {
@@ -67,8 +74,13 @@ public class MainFrame extends JFrame {
 		menubar.add(menu);
 	}
 	
-	private void generateData() {
-//		DatabaseGen db = new DatabaseGen();
+	private void generateData() throws IOException {
+		String s = JOptionPane.showInputDialog(null, "Insira o ficheiro onde pretende escrever");
+		if(s.equals(null)) {
+			DatabaseGen db = new DatabaseGen();
+		} else {
+			DatabaseGen db = new DatabaseGen(new File(s));
+		}
 	}
 	
 	private void addPurchase() {
@@ -76,7 +88,7 @@ public class MainFrame extends JFrame {
 		JTextField field1 = new JTextField();
 		JTextField field2 = new JTextField();
 		JLabel l1 = new JLabel("ID do utilizador (1-1000) ");
-		JLabel l2 = new JLabel("ID do produto (250-350) ");
+		JLabel l2 = new JLabel("ID do produto ");
 		p.add(l1); p.add(field1); p.add(l2); p.add(field2);
 		JOptionPane.showMessageDialog(null, p);
 		int user = Integer.parseInt(field1.getText());
