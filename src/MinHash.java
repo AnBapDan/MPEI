@@ -185,4 +185,10 @@ public class MinHash {
 		this.nl = nl;
 	}
 	
+	public double getValueOfMatrix(int user1, int user2) {
+		double tmp[][] = getMatrix();
+		return tmp[user1-1][user2-1];
+	}
+	
+	
 }
