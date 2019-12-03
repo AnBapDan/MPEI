@@ -19,7 +19,7 @@ public class BloomFilter {
 	
 	public void add(int u, int p) {
 		
-		int[] hashes = {hash1(u,p),hash2(u,p)};
+		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
 		boolean bol = exists(u,p,hashes);
 		if(bol) {
 			System.out.println("Already exists");
@@ -28,6 +28,10 @@ public class BloomFilter {
 			System.out.println("Added");
 			bloom[hashes[0]] = 1;
 			bloom[hashes[1]] = 1;
+			bloom[hashes[2]] = 1;
+			bloom[hashes[3]] = 1;
+			bloom[hashes[4]] = 1;
+			
 		}	
 	}
 	
@@ -45,7 +49,7 @@ public class BloomFilter {
 		return cont;
 	}
 
-	private int hash1(long hashuser, long hashprod) {										// Carter Wegman	
+	private int hash1(long hashuser, long hashprod) {												// Carter Wegman	
 		if(a==0) {																					//Needs to be reseted after each row
 			try {
 				p = (int)(Math.random()*3)+1;	
@@ -56,7 +60,7 @@ public class BloomFilter {
 			b = (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
-			return (int) (((a*hashprod+b*hashuser) % p )% 80000);
+			return (int) (((a*hashprod+b*hashuser) % p )% bloom.length);
 		}
 		return -1;																					//error code										
 	}
@@ -72,8 +76,56 @@ public class BloomFilter {
 			b= (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
 		}
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
-			 return (int) Math.abs(((a*hashuser-hashprod*b) % M )% p);
+			return (int) Math.abs((((a*hashuser-hashprod*b) % M )% p)% bloom.length);
 		}
+		return -1;	
+	}
+	
+	private int hash3(long hashuser,long hashprod) {
+		if(a == 0) {																					//Needs to be reseted after each row
+			try {
+				p = (int)(Math.random()*11)+1;	
+				p = prime[p-1];																	
+			}
+			catch(Exception e) {p=prime[prime.length-1];}											
+			a = (long) (Math.random()*p)+1;															
+			b = (long) (Math.random()*p)+1;																								
+		}
+		if(a != 0 & b != 0 & p != 0) {
+			return (int) Math.abs((((hashprod*p*a*hashuser)/Math.log(2)*b)%p)% bloom.length);
+		}
+		return -1;		
+	}
+
+	private int hash4(long hashuser,long hashprod) {
+		if(a == 0) {																					//Needs to be reseted after each row
+			try {
+				p = (int)(Math.random()*11)+1;	
+				p = prime[p-1];																	
+			}
+			catch(Exception e) {p=prime[prime.length-1];}											
+			a = (long) (Math.random()*p)+1;															
+			b = (long) (Math.random()*p)+1;																								
+		}
+		if(a != 0 & b != 0 & p !=0) {
+			return (int) Math.abs(((Math.pow(a*hashprod*hashuser,2)/Math.log(b))%p)% bloom.length);
+		}	
+		return -1;
+	}
+
+	private int hash5(long hashuser,long hashprod) {
+		if(a == 0) {																					//Needs to be reseted after each row
+			try {
+				p = (int)(Math.random()*11)+1;	
+				p = prime[p-1];																	
+			}
+			catch(Exception e) {p=prime[prime.length-1];}											
+			a = (long) (Math.random()*p)+1;															
+			b = (long) (Math.random()*p)+1;																								
+		}
+		if(a != 0 & b != 0 & p !=0) {
+			return (int) Math.abs(((Math.pow(a*hashprod*hashuser,2)/Math.log(p))%b)%bloom.length);
+		}	
 		return -1;	
 	}
 }

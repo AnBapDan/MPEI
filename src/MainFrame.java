@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ public class MainFrame extends JFrame {
 	private ActionListener a1;
 	private BloomFilter bf;
 	private	JMenuItem readFile;
+	private int n;
 
 	public MainFrame() {
 		super("Habitos de Compras");
@@ -34,6 +37,7 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		content = new JPanel();
+		content.setLayout(new GridLayout(1,3));
 		content.setBackground(Color.GRAY);
 		bf = new BloomFilter(10000);			 	//Por omissao serao 10000 compras
 		a1 = new ActionListener() {
@@ -90,6 +94,30 @@ public class MainFrame extends JFrame {
 	
 	private void createContent() {
 		
+		JPanel leftcol = new JPanel(new GridBagLayout());
+		JLabel leftcolName = new JLabel("MinHash");
+		JTextArea area1 = new JTextArea();
+		area1.setText("Users");
+		leftcol.add(leftcolName);
+		leftcol.add(area1);
+		
+		JPanel midcol = new JPanel(new GridBagLayout());
+		JLabel midcolName = new JLabel("MinHash");
+		JTextArea area2 = new JTextArea();
+		area2.setText("Swag");
+		midcol.add(midcolName);
+		midcol.add(area2);
+		
+		JPanel rightcol = new JPanel(new GridBagLayout());
+		JLabel rightcolName = new JLabel("Similaridade");
+		JTextArea area3 = new JTextArea();
+		area3.setText("Similaridade: ");
+		rightcol.add(rightcolName);
+		rightcol.add(area3);
+		
+		content.add(leftcol);
+		content.add(midcol);
+		content.add(rightcol);
 	}
 
 	private void generateData() throws IOException {
@@ -116,7 +144,8 @@ public class MainFrame extends JFrame {
 			String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
 			Path file = Paths.get("src/"+f);
 			List<String> lines = Files.readAllLines(file);
-			BloomFilter b = new BloomFilter(lines.size());
+			n = lines.size();
+			BloomFilter b = new BloomFilter(n);
 			for(int i = 0; i < lines.size(); i++) {
 				String [] split = lines.get(i).split("\t");
 				int user = Integer.parseInt(split[0]);
@@ -128,7 +157,8 @@ public class MainFrame extends JFrame {
 			Path fich = Paths.get("src/"+ficheiro);
 			if(Files.exists(fich, LinkOption.NOFOLLOW_LINKS)) {
 				List<String> lines = Files.readAllLines(fich);
-				BloomFilter b = new BloomFilter(lines.size());
+				n = lines.size();
+				BloomFilter b = new BloomFilter(n);
 				for(int i = 0; i < lines.size(); i++) {
 					String [] split = lines.get(i).split("\t");
 					int user = Integer.parseInt(split[0]);
