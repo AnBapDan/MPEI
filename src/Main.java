@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		
-		BloomFilter bf = new BloomFilter();
+		BloomFilter bf = new BloomFilter(10000);
 		
 		Path f = Paths.get("src/db.txt");
 		Scanner scf = new Scanner(f);
