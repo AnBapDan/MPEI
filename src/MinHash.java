@@ -71,10 +71,22 @@ public class MinHash {
 		similarity = intersection/k;                     											 //(a.size()+b.size()-intersection);  (number of min / number of hash functions used)
 		return similarity;
 	}
-
+	
+	public Set<Ponto> thresholdVal(double threshold) {												//Finds which pair user/user has an upper "threshold val"
+		Set<Ponto> vals = new HashSet<>();
+		for(int i = 0; i<nl;i++) {																	
+			for(int j = i+1; j<nl;j++) {															//searches the up right triangle of the matrix
+				if(matrix[i][j] >= threshold) {														//Finds pairs with values >= threshold
+					vals.add(new Ponto(i+1,j+1));													//Saves them
+				}
+			}
+		}
+		return vals;
+	}
+	
 
 	private long minhashf(long hashprod) {															//switches between to types of hash functions
-		if(x == 0) {																					//Needs to be reseted after each row
+		if(x == 0) {																				//Needs to be reseted after each row
 			x = (int) ((Math.random()*5)+1);														//TODO
 			//x=1;
 		}
