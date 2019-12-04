@@ -1,6 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -150,28 +153,46 @@ public class MainFrame extends JFrame {
 		
 		
 		//Similarity column
-		JPanel rightcol = new JPanel(new BorderLayout());
+		JPanel right = new JPanel(new GridLayout(2,1));
+		
+		JPanel rightcol = new JPanel(new GridBagLayout());
+		GridBagConstraints rgc = new GridBagConstraints();
+		
 		JPanel righttop = new JPanel();
 		JPanel rightbottom = new JPanel();
 		JPanel rightresult = new JPanel();
+		
+		JPanel embed = new JPanel(new GridBagLayout());
+		GridBagConstraints egc = new GridBagConstraints();
+		
 		righttop.add(label1);
 		rightbottom.add(label2);
 		rightresult.add(label3);
-		rightcol.add(righttop,BorderLayout.NORTH);
-		rightcol.add(rightbottom,BorderLayout.CENTER);
-		rightcol.add(rightresult,BorderLayout.SOUTH);
+		egc.gridx = 0;
+		egc.gridy = 0;
+		embed.add(righttop,egc);
+		egc.gridy = 1;
+		embed.add(rightbottom,egc);
+		
+		rgc.gridx = 0;
+		rgc.gridy = 0;
+		rightcol.add(embed,rgc);
+		rgc.gridy = 1;
+		rightcol.add(rightresult,rgc);
 		
 		area1.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				JList<Object> tmp = (JList<Object>) e.getSource();
 				label1 = new JLabel("Utilizador 1: "+tmp.getSelectedValue().toString());
 				user1 = Integer.parseInt(tmp.getSelectedValue().toString());		
-				rightcol.remove(righttop);
+				embed.remove(righttop);
 				righttop.removeAll();
-				rightcol.revalidate();
-				rightcol.repaint();
+				embed.revalidate();
+				embed.repaint();
 				righttop.add(label1);
-				rightcol.add(righttop,BorderLayout.NORTH);
+				egc.gridx = 0;
+				egc.gridy = 0;
+				embed.add(righttop,egc);
 				if(user1 != 0 && user2 != 0) {
 					if(user1 > user2) {				
 						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
@@ -180,7 +201,9 @@ public class MainFrame extends JFrame {
 						rightcol.revalidate();
 						rightcol.repaint();
 						rightresult.add(label3);
-						rightcol.add(rightresult,BorderLayout.SOUTH);
+						rgc.gridx = 0;
+						rgc.gridy = 1;
+						rightcol.add(rightresult,rgc);
 					}
 					else if(user1 == user2) {
 						label3 = new JLabel("Resultado: 1.0");
@@ -189,7 +212,9 @@ public class MainFrame extends JFrame {
 						rightcol.revalidate();
 						rightcol.repaint();
 						rightresult.add(label3);
-						rightcol.add(rightresult,BorderLayout.SOUTH);
+						rgc.gridx = 0;
+						rgc.gridy = 1;
+						rightcol.add(rightresult,rgc);
 					}
 					else {
 						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
@@ -198,7 +223,9 @@ public class MainFrame extends JFrame {
 						rightcol.revalidate();
 						rightcol.repaint();
 						rightresult.add(label3);
-						rightcol.add(rightresult,BorderLayout.SOUTH);
+						rgc.gridx = 0;
+						rgc.gridy = 1;
+						rightcol.add(rightresult,rgc);
 					}
 				}
 			}
@@ -209,12 +236,14 @@ public class MainFrame extends JFrame {
 				JList<Object> tmp = (JList<Object>) e.getSource();
 				label2 = new JLabel("Utilizador 2: "+tmp.getSelectedValue().toString());
 				user2 = Integer.parseInt(tmp.getSelectedValue().toString());
-				rightcol.remove(rightbottom);
+				embed.remove(rightbottom);
 				rightbottom.removeAll();
-				rightcol.revalidate();
-				rightcol.repaint();
+				embed.revalidate();
+				embed.repaint();
 				rightbottom.add(label2);
-				rightcol.add(rightbottom,BorderLayout.CENTER);
+				egc.gridx = 0;
+				egc.gridy = 1;
+				embed.add(rightbottom,egc);
 				if(user1 != 0 && user2 != 0) {
 					if(user1 > user2) {				
 						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
@@ -223,7 +252,9 @@ public class MainFrame extends JFrame {
 						rightcol.revalidate();
 						rightcol.repaint();
 						rightresult.add(label3);
-						rightcol.add(rightresult,BorderLayout.SOUTH);
+						rgc.gridx = 0;
+						rgc.gridy = 1;
+						rightcol.add(rightresult,rgc);
 					}
 					else if(user1 == user2) {
 						label3 = new JLabel("Resultado: 1.0");
@@ -232,7 +263,9 @@ public class MainFrame extends JFrame {
 						rightcol.revalidate();
 						rightcol.repaint();
 						rightresult.add(label3);
-						rightcol.add(rightresult,BorderLayout.SOUTH);
+						rgc.gridx = 0;
+						rgc.gridy = 1;
+						rightcol.add(rightresult,rgc);
 					}
 					else {
 						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
@@ -241,18 +274,51 @@ public class MainFrame extends JFrame {
 						rightcol.revalidate();
 						rightcol.repaint();
 						rightresult.add(label3);
-						rightcol.add(rightresult,BorderLayout.SOUTH);
+						rgc.gridx = 0;
+						rgc.gridy = 1;
+						rightcol.add(rightresult,rgc);
 					}
 				}
 			}
 		});
 		
+		JPanel bottomright = new JPanel(new GridBagLayout());
+		GridBagConstraints gc = new GridBagConstraints();
+		gc.gridx = 0;
+		gc.gridy = 0;
+		JLabel user = new JLabel("Utilizador");
+		bottomright.add(user,gc);
+		gc.gridx = 1;
+		JTextField userID = new JTextField();
+		bottomright.add(userID,gc);
+		gc.gridx = 0;
+		gc.gridy = 1;
+		JLabel thresh = new JLabel("Threshold");
+		bottomright.add(thresh,gc);
+		gc.gridx = 1;
+		JTextField text = new JTextField();
+		text.setSize(30, 30);
+		bottomright.add(text,gc);
+		gc.gridx = 1;
+		gc.gridy = 2;
+		JButton search = new JButton("Procurar");
+		bottomright.add(search,gc);
+
+		gc.gridx = 1;
+		gc.gridy = 3;
+		JTextArea textarea = new JTextArea();
+		bottomright.add(textarea,gc);
+		
+		
+		
 		JPanel left = new JPanel(new GridLayout(1,2));
 		left.add(leftcol);
 		left.add(midcol);
+		right.add(rightcol);
+		right.add(bottomright);
 		minhashPanel.setLayout(new BorderLayout());
 		minhashPanel.add(left,BorderLayout.WEST);
-		minhashPanel.add(rightcol,BorderLayout.CENTER);
+		minhashPanel.add(right,BorderLayout.CENTER);
 		tp.setBounds(0, 0, 200, 200);
 	}
 
