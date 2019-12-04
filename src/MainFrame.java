@@ -10,7 +10,6 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
@@ -28,10 +27,12 @@ public class MainFrame extends JFrame {
 	private JMenuItem quit;
 	private ActionListener a1;
 	private BloomFilter bf;
+	private MinHash mh;
+	private List<String> lines;
 	private	JMenuItem readFile;
 	private int n;
 
-	public MainFrame() {
+	public MainFrame() throws IOException {
 		super("Habitos de Compras");
 		setSize(800, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -68,6 +69,7 @@ public class MainFrame extends JFrame {
 			}
 		};
 		createMenuBar();
+		readFile("db.txt");
 		createContent();
 		setContentPane(content);
 		setJMenuBar(menubar);
@@ -94,21 +96,30 @@ public class MainFrame extends JFrame {
 	
 	private void createContent() {
 		
-		JPanel leftcol = new JPanel(new GridBagLayout());
+		JPanel leftcol = new JPanel(new GridLayout(2,1));
 		JLabel leftcolName = new JLabel("MinHash");
-		JTextArea area1 = new JTextArea();
-		area1.setText("Users");
-		leftcol.add(leftcolName);
-		leftcol.add(area1);
+		DefaultListModel<Object> lm = new DefaultListModel<>();
+		for(int i = 0; i < lines.size(); i++) {
+			String [] tmp = lines.get(i).split("\t");
+			lm.add(i, tmp[0]);
+		}
+		JList<Object> area1 = new JList<Object>(lm);
+		JScrollPane scroller = new JScrollPane(area1);
+		scroller.setPreferredSize(new Dimension(200,80));
 		
-		JPanel midcol = new JPanel(new GridBagLayout());
+		leftcol.add(leftcolName);
+		leftcol.add(scroller);
+		
+		
+		
+		JPanel midcol = new JPanel(new GridLayout(2,1));
 		JLabel midcolName = new JLabel("MinHash");
 		JTextArea area2 = new JTextArea();
-		area2.setText("Swag");
+		area2.setText("Lista de Utilizadores");
 		midcol.add(midcolName);
 		midcol.add(area2);
 		
-		JPanel rightcol = new JPanel(new GridBagLayout());
+		JPanel rightcol = new JPanel(new GridLayout(2,1));
 		JLabel rightcolName = new JLabel("Similaridade");
 		JTextArea area3 = new JTextArea();
 		area3.setText("Similaridade: ");
@@ -144,6 +155,7 @@ public class MainFrame extends JFrame {
 			String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
 			Path file = Paths.get("src/"+f);
 			List<String> lines = Files.readAllLines(file);
+			this.lines = lines;
 			n = lines.size();
 			BloomFilter b = new BloomFilter(n);
 			for(int i = 0; i < lines.size(); i++) {
@@ -153,20 +165,22 @@ public class MainFrame extends JFrame {
 				b.add(user,prod);
 			}
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+			mh = new MinHash(lines);
 		} else {
 			Path fich = Paths.get("src/"+ficheiro);
-			if(Files.exists(fich, LinkOption.NOFOLLOW_LINKS)) {
-				List<String> lines = Files.readAllLines(fich);
-				n = lines.size();
-				BloomFilter b = new BloomFilter(n);
-				for(int i = 0; i < lines.size(); i++) {
-					String [] split = lines.get(i).split("\t");
-					int user = Integer.parseInt(split[0]);
-					int prod = Integer.parseInt(split[1]);
-					b.add(user,prod);
-				}
-				System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+			List<String> lines = Files.readAllLines(fich);
+			this.lines = lines;
+			n = lines.size();
+			BloomFilter b = new BloomFilter(n);
+			for(int i = 0; i < lines.size(); i++) {
+				String [] split = lines.get(i).split("\t");
+				int user = Integer.parseInt(split[0]);
+				int prod = Integer.parseInt(split[1]);
+				b.add(user,prod);
 			}
+			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+			mh = new MinHash(lines);
+
 		}
 	}
 }
