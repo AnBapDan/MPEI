@@ -2,8 +2,8 @@ import java.util.*;
 
 public class MinHash {		
 	private long[][] mins; 																			//matrix
-	private int k = 50;																				//k= number of hashfunctions
-	private int nl = 500;																				//nl = number of lists(default 1000)
+	private int k = 100;																			//k= number of hashfunctions ( always 100)
+	private int nl = 500;																			//nl = number of lists(default 500)
 	private long hashprod;																			//hashprod id 
 	private static long a,b = 0;																		//longer variables
 	private static final int M = 38327;																//prime number
@@ -13,7 +13,8 @@ public class MinHash {
 	private List<Set<Long>> listofsets;
 	private double[][]matrix = new double[nl][nl];
 
-	public MinHash(List<String> lines) {
+	public MinHash(List<String> lines, int nl) {
+		this.nl=nl;
 		mins = new long[k][nl];																		//initialize a zero matrix with k rows and nl columns
 		listofsets = new ArrayList<Set<Long>>();														//creates an empty List to receive each user Set 
 		this.lines = lines;
@@ -217,7 +218,8 @@ public class MinHash {
 	public int getSizeofListSets() {
 		return listofsets.size();
 	}
-
+	
+	
 	
 
 }
