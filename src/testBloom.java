@@ -20,6 +20,7 @@ public class testBloom {
 			int prod = Integer.parseInt(split[1]);
 			b.add(user,prod);
 		}
+		System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
 		scf.close();
 	}
 

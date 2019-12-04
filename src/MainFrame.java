@@ -1,5 +1,7 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -25,12 +27,14 @@ public class MainFrame extends JFrame {
 	private JMenuItem menuitem1;
 	private JMenuItem menuitem2;
 	private JMenuItem quit;
+	private JTabbedPane tp;
 	private ActionListener a1;
 	private BloomFilter bf;
 	private MinHash mh;
 	private List<String> lines;
 	private	JMenuItem readFile;
 	private int n;
+	private int nl = 500;
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
@@ -71,7 +75,8 @@ public class MainFrame extends JFrame {
 		createMenuBar();
 		readFile("db.txt");
 		createContent();
-		setContentPane(content);
+		add(tp);
+//		setContentPane(content);
 		setJMenuBar(menubar);
 		setVisible(true);
 	}
@@ -96,45 +101,89 @@ public class MainFrame extends JFrame {
 	
 	private void createContent() {
 		
-		JPanel leftcol = new JPanel(new GridLayout(2,1));
-		JLabel leftcolName = new JLabel("MinHash");
+		tp = new JTabbedPane();
+		JPanel bloomPanel = new JPanel();
+		JPanel minhashPanel = new JPanel();
+		
+		//Left list column
+		JPanel leftcol = new JPanel(new BorderLayout());
+		JPanel lefttop = new JPanel();
+		lefttop.setPreferredSize(new Dimension(50,20));
+		JLabel leftcolName = new JLabel("Lista 1");
 		DefaultListModel<Object> lm = new DefaultListModel<>();
-		for(int i = 0; i < lines.size(); i++) {
-			String [] tmp = lines.get(i).split("\t");
-			lm.add(i, tmp[0]);
+		
+		int size = mh.getSizeofListSets();
+		for(int i = 0; i < size ; i++) {
+			lm.add(i, i+1);
 		}
 		JList<Object> area1 = new JList<Object>(lm);
 		JScrollPane scroller = new JScrollPane(area1);
-		scroller.setPreferredSize(new Dimension(200,80));
+		scroller.setPreferredSize(new Dimension(100,500));
+		lefttop.add(leftcolName);
 		
-		leftcol.add(leftcolName);
-		leftcol.add(scroller);
+		leftcol.add(lefttop,BorderLayout.NORTH);
+		leftcol.add(scroller,BorderLayout.CENTER);
 		
 		
+		//Rigth List column
+		JPanel midcol = new JPanel(new BorderLayout());
+		JPanel midtop = new JPanel();
+		midtop.setPreferredSize(new Dimension(50,20));
+		JLabel midcolName = new JLabel("Lista 2");
+		DefaultListModel<Object> lm2 = new DefaultListModel<>();
 		
-		JPanel midcol = new JPanel(new GridLayout(2,1));
-		JLabel midcolName = new JLabel("MinHash");
-		JTextArea area2 = new JTextArea();
-		area2.setText("Lista de Utilizadores");
-		midcol.add(midcolName);
-		midcol.add(area2);
+		int size2 = mh.getSizeofListSets();
+		for(int i = 0; i < size2 ; i++) {
+			lm2.add(i, i+1);
+		}
+		JList<Object> area2 = new JList<Object>(lm);
+		JScrollPane scroller2 = new JScrollPane(area2);
+		scroller.setPreferredSize(new Dimension(100,500));
+		midtop.add(midcolName);
 		
-		JPanel rightcol = new JPanel(new GridLayout(2,1));
+		midcol.add(midtop,BorderLayout.NORTH);
+		midcol.add(scroller2,BorderLayout.CENTER);
+		
+		
+		//Similarity column
+		JPanel rightcol = new JPanel(new BorderLayout());
+		JPanel righttop = new JPanel();
+		righttop.setPreferredSize(new Dimension(50,50));
 		JLabel rightcolName = new JLabel("Similaridade");
 		JTextArea area3 = new JTextArea();
 		area3.setText("Similaridade: ");
-		rightcol.add(rightcolName);
-		rightcol.add(area3);
+		righttop.add(rightcolName);
 		
-		content.add(leftcol);
-		content.add(midcol);
-		content.add(rightcol);
+		rightcol.add(righttop,BorderLayout.NORTH);
+		rightcol.add(area3,BorderLayout.CENTER);
+		
+		JPanel left = new JPanel(new GridLayout(1,2));
+		left.add(leftcol);
+		left.add(midcol);
+		minhashPanel.setLayout(new BorderLayout());
+		minhashPanel.add(left,BorderLayout.WEST);
+		minhashPanel.add(rightcol,BorderLayout.CENTER);
+		tp.setBounds(0, 0, 200, 200);
+		tp.addTab("Bloom",bloomPanel);
+		tp.addTab("MinHash",minhashPanel);
 	}
 
 	private void generateData() throws IOException {
-		String s = JOptionPane.showInputDialog(null, "Insira o ficheiro onde pretende escrever");
-		DatabaseGen db = new DatabaseGen(s);
-		readFile(s);
+		JPanel p = new JPanel(new GridLayout(2,2));
+		JLabel l1 = new JLabel("Insira o ficheiro onde pretende escrever");
+		JLabel l2 = new JLabel("Insira o numero de utilizadores pretendido");
+		JTextField f1 = new JTextField();
+		JTextField f2 = new JTextField();
+		
+		p.add(l1); p.add(f1); p.add(l2); p.add(f2);
+		
+		JOptionPane.showInputDialog(null, p);
+		
+		DatabaseGen db = new DatabaseGen(f1.getText(),Integer.parseInt(f2.getText()));
+		this.nl = Integer.parseInt(f2.getText());
+		mh.setNl(nl);
+		readFile(f1.getText());
+		createContent();
 	}
 
 	private void addPurchase() {
@@ -166,6 +215,7 @@ public class MainFrame extends JFrame {
 			}
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
 			mh = new MinHash(lines);
+			createContent();
 		} else {
 			Path fich = Paths.get("src/"+ficheiro);
 			List<String> lines = Files.readAllLines(fich);
@@ -180,7 +230,7 @@ public class MainFrame extends JFrame {
 			}
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
 			mh = new MinHash(lines);
-
+			createContent();
 		}
 	}
 }
