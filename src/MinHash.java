@@ -87,6 +87,9 @@ public class MinHash {
 				vals.add(j+1);																		//Saves them
 			}
 		}
+		if(threshold == 1.0) {
+			vals.add(user);
+		}
 		return vals;
 	}
 
