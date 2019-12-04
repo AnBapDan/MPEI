@@ -1,14 +1,13 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -31,12 +30,16 @@ public class MainFrame extends JFrame {
 	private ActionListener a1;
 	private BloomFilter bf;
 	private MinHash mh;
-	private List<String> lines;
 	private	JMenuItem readFile;
 	private int n;
 	private int nl;
+	private int user1;
+	private int user2;
 	private JPanel bloomPanel;
 	private JPanel minhashPanel;
+	private JLabel label1 = new JLabel("Utilizador 1: Esperando valor");
+	private JLabel label2 = new JLabel("Utilizador 2: Esperando valor");
+	private JLabel label3 = new JLabel("Resultado: ");
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
@@ -126,7 +129,7 @@ public class MainFrame extends JFrame {
 		leftcol.add(scroller,BorderLayout.CENTER);
 		
 		
-		//Rigth List column
+		//Right List column
 		JPanel midcol = new JPanel(new BorderLayout());
 		JPanel midtop = new JPanel();
 		midtop.setPreferredSize(new Dimension(50,20));
@@ -149,14 +152,100 @@ public class MainFrame extends JFrame {
 		//Similarity column
 		JPanel rightcol = new JPanel(new BorderLayout());
 		JPanel righttop = new JPanel();
-		righttop.setPreferredSize(new Dimension(50,50));
-		JLabel rightcolName = new JLabel("Similaridade");
-		JTextArea area3 = new JTextArea();
-		area3.setText("Similaridade: ");
-		righttop.add(rightcolName);
-		
+		JPanel rightbottom = new JPanel();
+		JPanel rightresult = new JPanel();
+		righttop.add(label1);
+		rightbottom.add(label2);
+		rightresult.add(label3);
 		rightcol.add(righttop,BorderLayout.NORTH);
-		rightcol.add(area3,BorderLayout.CENTER);
+		rightcol.add(rightbottom,BorderLayout.CENTER);
+		rightcol.add(rightresult,BorderLayout.SOUTH);
+		
+		area1.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				JList<Object> tmp = (JList<Object>) e.getSource();
+				label1 = new JLabel("Utilizador 1: "+tmp.getSelectedValue().toString());
+				user1 = Integer.parseInt(tmp.getSelectedValue().toString());		
+				rightcol.remove(righttop);
+				righttop.removeAll();
+				rightcol.revalidate();
+				rightcol.repaint();
+				righttop.add(label1);
+				rightcol.add(righttop,BorderLayout.NORTH);
+				if(user1 != 0 && user2 != 0) {
+					if(user1 > user2) {				
+						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
+						rightcol.remove(rightresult);
+						rightresult.removeAll();
+						rightcol.revalidate();
+						rightcol.repaint();
+						rightresult.add(label3);
+						rightcol.add(rightresult,BorderLayout.SOUTH);
+					}
+					else if(user1 == user2) {
+						label3 = new JLabel("Resultado: 1.0");
+						rightcol.remove(rightresult);
+						rightresult.removeAll();
+						rightcol.revalidate();
+						rightcol.repaint();
+						rightresult.add(label3);
+						rightcol.add(rightresult,BorderLayout.SOUTH);
+					}
+					else {
+						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
+						rightcol.remove(rightresult);
+						rightresult.removeAll();
+						rightcol.revalidate();
+						rightcol.repaint();
+						rightresult.add(label3);
+						rightcol.add(rightresult,BorderLayout.SOUTH);
+					}
+				}
+			}
+		});
+		
+		area2.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				JList<Object> tmp = (JList<Object>) e.getSource();
+				label2 = new JLabel("Utilizador 2: "+tmp.getSelectedValue().toString());
+				user2 = Integer.parseInt(tmp.getSelectedValue().toString());
+				rightcol.remove(rightbottom);
+				rightbottom.removeAll();
+				rightcol.revalidate();
+				rightcol.repaint();
+				rightbottom.add(label2);
+				rightcol.add(rightbottom,BorderLayout.CENTER);
+				if(user1 != 0 && user2 != 0) {
+					if(user1 > user2) {				
+						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
+						rightcol.remove(rightresult);
+						rightresult.removeAll();
+						rightcol.revalidate();
+						rightcol.repaint();
+						rightresult.add(label3);
+						rightcol.add(rightresult,BorderLayout.SOUTH);
+					}
+					else if(user1 == user2) {
+						label3 = new JLabel("Resultado: 1.0");
+						rightcol.remove(rightresult);
+						rightresult.removeAll();
+						rightcol.revalidate();
+						rightcol.repaint();
+						rightresult.add(label3);
+						rightcol.add(rightresult,BorderLayout.SOUTH);
+					}
+					else {
+						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
+						rightcol.remove(rightresult);
+						rightresult.removeAll();
+						rightcol.revalidate();
+						rightcol.repaint();
+						rightresult.add(label3);
+						rightcol.add(rightresult,BorderLayout.SOUTH);
+					}
+				}
+			}
+		});
 		
 		JPanel left = new JPanel(new GridLayout(1,2));
 		left.add(leftcol);
@@ -203,7 +292,6 @@ public class MainFrame extends JFrame {
 			String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
 			Path file = Paths.get("src/"+f);
 			List<String> lines = Files.readAllLines(file);
-			this.lines = lines;
 			n = lines.size();
 			BloomFilter b = new BloomFilter(n);
 			
@@ -233,7 +321,6 @@ public class MainFrame extends JFrame {
 		} else {
 			Path fich = Paths.get("src/"+ficheiro);
 			List<String> lines = Files.readAllLines(fich);
-			this.lines = lines;
 			n = lines.size();
 			BloomFilter b = new BloomFilter(n);
 			
