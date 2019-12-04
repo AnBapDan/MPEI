@@ -37,14 +37,13 @@ public class MainFrame extends JFrame {
 	private int nl;
 	private JPanel bloomPanel;
 	private JPanel minhashPanel;
-	private JPanel left;
-	private boolean first;
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
 		setSize(800, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		tp = new JTabbedPane();
 		content = new JPanel();
 		content.setLayout(new GridLayout(1,3));
 		content.setBackground(Color.GRAY);
@@ -76,13 +75,10 @@ public class MainFrame extends JFrame {
 				}
 			}
 		};
-		
-		first = true;
 		createMenuBar();
 		readFile("db.txt");
-		createContent();
+//		createContent();
 		add(tp);
-		first = false;
 		setJMenuBar(menubar);
 		setVisible(true);
 	}
@@ -107,7 +103,6 @@ public class MainFrame extends JFrame {
 	
 	private void createContent() {
 		
-		tp = new JTabbedPane();
 		bloomPanel = new JPanel();
 		minhashPanel = new JPanel();
 		
@@ -163,15 +158,13 @@ public class MainFrame extends JFrame {
 		rightcol.add(righttop,BorderLayout.NORTH);
 		rightcol.add(area3,BorderLayout.CENTER);
 		
-		left = new JPanel(new GridLayout(1,2));
+		JPanel left = new JPanel(new GridLayout(1,2));
 		left.add(leftcol);
 		left.add(midcol);
 		minhashPanel.setLayout(new BorderLayout());
 		minhashPanel.add(left,BorderLayout.WEST);
 		minhashPanel.add(rightcol,BorderLayout.CENTER);
 		tp.setBounds(0, 0, 200, 200);
-		tp.addTab("Bloom",bloomPanel);
-		tp.addTab("MinHash",minhashPanel);
 	}
 
 	private void generateData() throws IOException {
@@ -230,10 +223,13 @@ public class MainFrame extends JFrame {
 			mh = new MinHash(lines,this.nl);
 			
 			minhashPanel.removeAll();
-			tp.remove(minhashPanel);
-			if(first == false)
-				refresh();
-			
+			tp.removeAll();
+			createContent();
+			minhashPanel.revalidate();
+			minhashPanel.repaint();
+			tp.add("Bloom",bloomPanel);
+			tp.add("MinHash",minhashPanel);
+			this.add(tp);
 		} else {
 			Path fich = Paths.get("src/"+ficheiro);
 			List<String> lines = Files.readAllLines(fich);
@@ -256,78 +252,14 @@ public class MainFrame extends JFrame {
 			mh = new MinHash(lines,this.nl);
 			if(minhashPanel != null)
 				minhashPanel.removeAll();
-			if(tp != null) {
-				tp.remove(minhashPanel);
-			}
-			if(first == false)
-				refresh();
+			if(tp != null)
+				tp.removeAll();
+			createContent();
+			minhashPanel.revalidate();
+			minhashPanel.repaint();
+			tp.add("Bloom",bloomPanel);
+			tp.add("MinHash",minhashPanel);
+			this.add(tp);		
 		}
-	}
-	
-	public void refresh() {
-		minhashPanel = new JPanel();
-		
-		//Left list column
-		JPanel leftcol = new JPanel(new BorderLayout());
-		JPanel lefttop = new JPanel();
-		lefttop.setPreferredSize(new Dimension(50,20));
-		JLabel leftcolName = new JLabel("Lista 1");
-		DefaultListModel<Object> lm = new DefaultListModel<>();
-		
-		int size = mh.getSizeofListSets();
-		for(int i = 0; i < size ; i++) {
-			lm.add(i, i+1);
-		}
-		JList<Object> area1 = new JList<Object>(lm);
-		JScrollPane scroller = new JScrollPane(area1);
-		scroller.setPreferredSize(new Dimension(100,500));
-		lefttop.add(leftcolName);
-		
-		leftcol.add(lefttop,BorderLayout.NORTH);
-		leftcol.add(scroller,BorderLayout.CENTER);
-		
-		
-		//Rigth List column
-		JPanel midcol = new JPanel(new BorderLayout());
-		JPanel midtop = new JPanel();
-		midtop.setPreferredSize(new Dimension(50,20));
-		JLabel midcolName = new JLabel("Lista 2");
-		DefaultListModel<Object> lm2 = new DefaultListModel<>();
-		
-		int size2 = mh.getSizeofListSets();
-		for(int i = 0; i < size2 ; i++) {
-			lm2.add(i, i+1);
-		}
-		JList<Object> area2 = new JList<Object>(lm);
-		JScrollPane scroller2 = new JScrollPane(area2);
-		scroller.setPreferredSize(new Dimension(100,500));
-		midtop.add(midcolName);
-		
-		midcol.add(midtop,BorderLayout.NORTH);
-		midcol.add(scroller2,BorderLayout.CENTER);
-		
-		
-		//Similarity column
-		JPanel rightcol = new JPanel(new BorderLayout());
-		JPanel righttop = new JPanel();
-		righttop.setPreferredSize(new Dimension(50,50));
-		JLabel rightcolName = new JLabel("Similaridade");
-		JTextArea area3 = new JTextArea();
-		area3.setText("Similaridade: ");
-		righttop.add(rightcolName);
-		
-		rightcol.add(righttop,BorderLayout.NORTH);
-		rightcol.add(area3,BorderLayout.CENTER);
-		
-		left = new JPanel(new GridLayout(1,2));
-		left.add(leftcol);
-		left.add(midcol);
-		minhashPanel.setLayout(new BorderLayout());
-		minhashPanel.add(left,BorderLayout.WEST);
-		minhashPanel.add(rightcol,BorderLayout.CENTER);
-		minhashPanel.revalidate();
-		minhashPanel.repaint();
-		tp.add("MinHash",minhashPanel);
-		this.add(tp);
 	}
 }
