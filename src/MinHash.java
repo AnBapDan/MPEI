@@ -82,6 +82,11 @@ public class MinHash {
 				vals.add(j+1);																		//Saves them
 			}
 		}
+		for(int j = user; j<nl; j++) {
+			if(matrix[j][user-1] >= threshold) {													//Finds pairs with values >= threshold
+				vals.add(j+1);																		//Saves them
+			}
+		}
 		return vals;
 	}
 
