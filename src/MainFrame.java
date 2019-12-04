@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
@@ -290,6 +291,8 @@ public class MainFrame extends JFrame {
 		bottomright.add(user,gc);
 		gc.gridx = 1;
 		JTextField userID = new JTextField();
+		userID.setPreferredSize(new Dimension(80,20));
+		gc.weighty = 0.1;
 		bottomright.add(userID,gc);
 		gc.gridx = 0;
 		gc.gridy = 1;
@@ -297,13 +300,53 @@ public class MainFrame extends JFrame {
 		bottomright.add(thresh,gc);
 		gc.gridx = 1;
 		JTextField text = new JTextField();
-		text.setSize(30, 30);
+		text.setPreferredSize(new Dimension(80,20));
+		gc.weighty = 0.1;
 		bottomright.add(text,gc);
 		gc.gridx = 1;
 		gc.gridy = 2;
 		JButton search = new JButton("Procurar");
-		bottomright.add(search,gc);
+		search.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(Double.parseDouble(text.getText()) < 0 || Double.parseDouble(text.getText()) > 1) {
+					JOptionPane.showMessageDialog(null, "O valor deve estar entre 0 e 1");
+				} else if(Integer.parseInt(userID.getText()) < 0 || Integer.parseInt(userID.getText()) > mh.getNl()){
+					JOptionPane.showMessageDialog(null, "O ID do utilizador nao e valido");
+				} else {
+					ArrayList<Integer> tmp = mh.thresholdVal(Integer.parseInt(userID.getText()),Double.parseDouble(text.getText()));
+					boolean first = true;
+					if(tmp.size() > 20 ) {
+						JOptionPane.showMessageDialog(null, "Foram encontrados "+tmp.size()+" valores com a similaridade igual ou superior a "+
+													  Double.parseDouble(text.getText()));
+					} else if (tmp.size() == 0) {
+						JOptionPane.showMessageDialog(null, "Nao existem quaisquer utilizadores a apresentar.");
+					} else {
+						String qp = "";
+						for(int q = 0 ; q< tmp.size(); q++) {
+							if(first) {
+								qp += tmp.get(q);
+								first = false;
+							}
+							else {
+								qp += ", "+tmp.get(q);
+							}
+							if((q+1)%3 == 0) {
+								qp += "\n";
+								first = true;
+							}
+						}
+						JOptionPane.showMessageDialog(null, qp);						
+					}
+					
+				}
+			}
+			
+		});				
+		bottomright.add(search,gc);
+		
+		
 		gc.gridx = 1;
 		gc.gridy = 3;
 		JTextArea textarea = new JTextArea();
