@@ -19,7 +19,7 @@ public class MinHash {
 		matrix = new double[this.nl][this.nl];
 		listofsets = new ArrayList<Set<Long>>();														//creates an empty List to receive each user Set 
 		this.lines = lines;
-		
+
 		hashes();
 		createSets();
 		getMinHashMatrix();
@@ -74,19 +74,17 @@ public class MinHash {
 		similarity = intersection/k;                     											 //(a.size()+b.size()-intersection);  (number of min / number of hash functions used)
 		return similarity;
 	}
-	
-	public Set<Ponto> thresholdVal(double threshold) {												//Finds which pair user/user has an upper "threshold val"
-		Set<Ponto> vals = new HashSet<>();
-		for(int i = 0; i<nl;i++) {																	
-			for(int j = i+1; j<nl;j++) {															//searches the up right triangle of the matrix
-				if(matrix[i][j] >= threshold) {														//Finds pairs with values >= threshold
-					vals.add(new Ponto(i+1,j+1));													//Saves them
-				}
+
+	public ArrayList<Integer> thresholdVal(int user,double threshold) {								//Finds which pair user/user has an upper "threshold val"															
+		ArrayList<Integer> vals = new ArrayList<>();
+		for(int j = user; j<nl; j++) {															
+			if(matrix[user-1][j] >= threshold) {													//Finds pairs with values >= threshold
+				vals.add(j+1);																		//Saves them
 			}
 		}
 		return vals;
 	}
-	
+
 
 	private long minhashf(long hashprod) {															//switches between to types of hash functions
 		if(x == 0) {																				//Needs to be reseted after each row
@@ -106,7 +104,7 @@ public class MinHash {
 
 		case 4:
 			return hash4(hashprod);
-			
+
 		case 5:
 			return hash5(hashprod);
 		}
@@ -115,7 +113,7 @@ public class MinHash {
 
 
 	private long hash1(long hashprod) {																// Carter Wegman
-		if(a == 0) {																					//Needs to be reseted after each row
+		if(a == 0) {																				//Needs to be reseted after each row
 			try {
 				p = (int)(Math.random()*3)+1;	
 				p = prime[3+p-1];																	//tries to copy the prime number of the array
@@ -131,7 +129,7 @@ public class MinHash {
 	}
 
 	private long hash2(long hashprod) {	
-		if(a == 0) {																					//Needs to be reseted after each row
+		if(a == 0) {																				//Needs to be reseted after each row
 			try {
 				p = (int)(Math.random()*3)+1;	
 				p = prime[3+p-1];																	//tries to copy the prime number of the array
@@ -141,7 +139,7 @@ public class MinHash {
 			b = (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
 		}
 		if(a != 0 & b != 0 & p != 0 & M != 0) {
-			return Math.abs(((a-hashprod*b) % M )% p);														//ℎ𝑎,𝑏(𝑥)=|((𝑎-𝑥*𝑏)𝑚𝑜𝑑M)𝑚𝑜𝑑p|;
+			return Math.abs(((a-hashprod*b) % M )% p);												//ℎ𝑎,𝑏(𝑥)=|((𝑎-𝑥*𝑏)𝑚𝑜𝑑M)𝑚𝑜𝑑p|;
 		}
 		return -1;	
 	}
@@ -220,8 +218,8 @@ public class MinHash {
 	public int getSizeofListSets() {
 		return listofsets.size();
 	}
-	
-	
-	
+
+
+
 
 }
