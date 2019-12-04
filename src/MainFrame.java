@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.*;
 
@@ -316,6 +318,7 @@ public class MainFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "O ID do utilizador nao e valido");
 				} else {
 					ArrayList<Integer> tmp = mh.thresholdVal(Integer.parseInt(userID.getText()),Double.parseDouble(text.getText()));
+					Collections.sort(tmp);
 					boolean first = true;
 					if(tmp.size() > 20 ) {
 						JOptionPane.showMessageDialog(null, "Foram encontrados "+tmp.size()+" valores com a similaridade igual ou superior a "+
