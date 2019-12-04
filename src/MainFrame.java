@@ -207,14 +207,20 @@ public class MainFrame extends JFrame {
 			this.lines = lines;
 			n = lines.size();
 			BloomFilter b = new BloomFilter(n);
+			
+			int maxID = 0;
 			for(int i = 0; i < lines.size(); i++) {
 				String [] split = lines.get(i).split("\t");
 				int user = Integer.parseInt(split[0]);
 				int prod = Integer.parseInt(split[1]);
 				b.add(user,prod);
+				
+				if(user > maxID) {
+					maxID = user;
+				}
 			}
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
-			mh = new MinHash(lines);
+			mh = new MinHash(lines,maxID);
 			createContent();
 		} else {
 			Path fich = Paths.get("src/"+ficheiro);
@@ -229,7 +235,7 @@ public class MainFrame extends JFrame {
 				b.add(user,prod);
 			}
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
-			mh = new MinHash(lines);
+			mh = new MinHash(lines,nl);
 			createContent();
 		}
 	}

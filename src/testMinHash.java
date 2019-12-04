@@ -14,7 +14,7 @@ public class testMinHash {
 		Path f = Paths.get("src/db.txt");
 		Scanner scf = new Scanner(f);
 		List<String> lines = Files.readAllLines(f);
-		MinHash mh = new MinHash(lines);
+		MinHash mh = new MinHash(lines,500);
 		
 		
 		PrintWriter pw = new PrintWriter("src/pw.txt");
