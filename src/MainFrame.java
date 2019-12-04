@@ -230,7 +230,7 @@ public class MainFrame extends JFrame {
 			mh = new MinHash(lines,this.nl);
 			
 			minhashPanel.removeAll();
-			tp.removeAll();
+			tp.remove(minhashPanel);
 			if(first == false)
 				refresh();
 			
@@ -257,7 +257,7 @@ public class MainFrame extends JFrame {
 			if(minhashPanel != null)
 				minhashPanel.removeAll();
 			if(tp != null) {
-				tp.removeAll();
+				tp.remove(minhashPanel);
 			}
 			if(first == false)
 				refresh();
@@ -266,7 +266,6 @@ public class MainFrame extends JFrame {
 	
 	public void refresh() {
 		minhashPanel = new JPanel();
-		bloomPanel = new JPanel();
 		
 		//Left list column
 		JPanel leftcol = new JPanel(new BorderLayout());
@@ -328,7 +327,6 @@ public class MainFrame extends JFrame {
 		minhashPanel.add(rightcol,BorderLayout.CENTER);
 		minhashPanel.revalidate();
 		minhashPanel.repaint();
-		tp.add("Bloom",bloomPanel);
 		tp.add("MinHash",minhashPanel);
 		this.add(tp);
 	}
