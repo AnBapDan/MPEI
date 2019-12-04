@@ -76,7 +76,6 @@ public class MainFrame extends JFrame {
 		readFile("db.txt");
 		createContent();
 		add(tp);
-//		setContentPane(content);
 		setJMenuBar(menubar);
 		setVisible(true);
 	}
@@ -242,6 +241,7 @@ public class MainFrame extends JFrame {
 			}
 			this.nl = maxID;
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+			System.out.println("Test: "+nl);
 			mh = new MinHash(lines,this.nl);
 			createContent();
 		}
