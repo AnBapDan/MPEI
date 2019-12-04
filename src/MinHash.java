@@ -3,21 +3,23 @@ import java.util.*;
 public class MinHash {		
 	private long[][] mins; 																			//matrix
 	private int k = 100;																			//k= number of hashfunctions ( always 100)
-	private int nl;																					//nl = number of lists(default 500)
+	private int nl;																					//nl = number of lists
 	private long hashprod;																			//hashprod id 
-	private static long a,b = 0;																		//longer variables
+	private static long a,b = 0;																	//longer variables
 	private static final int M = 38327;																//prime number
 	private static int x,p = 0;																		//intern variables
 	private int[] prime = {233,1019,24889,38327,51949,60617,80363,87277,100019,102013,104729};		//11 "random" prime numbers
 	private List<String> lines;
 	private List<Set<Long>> listofsets;
-	private double[][]matrix = new double[nl][nl];
+	private double[][]matrix;
 
 	public MinHash(List<String> lines, int nl) {
 		this.nl=nl;
-		mins = new long[k][this.nl];																		//initialize a zero matrix with k rows and nl columns
+		mins = new long[k][this.nl];																	//initialize a zero matrix with k rows and nl columns
+		matrix = new double[this.nl][this.nl];
 		listofsets = new ArrayList<Set<Long>>();														//creates an empty List to receive each user Set 
 		this.lines = lines;
+		
 		hashes();
 		createSets();
 		getMinHashMatrix();
@@ -56,7 +58,7 @@ public class MinHash {
 
 	private void getMinHashMatrix(){																//creates a final matrix
 		for(int i = 0; i<nl;i++) {																	
-			for(int j = i+1; j<nl;j++) {																//fill the up right triangle of the matrix
+			for(int j = i+1; j<nl;j++) {															//fill the up right triangle of the matrix
 				matrix[i][j] = Math.round(similarity(i,j)*100.0)/100.0;								//with the similarity of the sets ( similarity() method) with 2 decimal cases
 			}
 		}
