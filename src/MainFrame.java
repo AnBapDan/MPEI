@@ -35,6 +35,8 @@ public class MainFrame extends JFrame {
 	private	JMenuItem readFile;
 	private int n;
 	private int nl;
+	private JPanel bloomPanel;
+	private JPanel minhashPanel;
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
@@ -101,8 +103,8 @@ public class MainFrame extends JFrame {
 	private void createContent() {
 		
 		tp = new JTabbedPane();
-		JPanel bloomPanel = new JPanel();
-		JPanel minhashPanel = new JPanel();
+		bloomPanel = new JPanel();
+		minhashPanel = new JPanel();
 		
 		//Left list column
 		JPanel leftcol = new JPanel(new BorderLayout());
@@ -165,24 +167,25 @@ public class MainFrame extends JFrame {
 		tp.setBounds(0, 0, 200, 200);
 		tp.addTab("Bloom",bloomPanel);
 		tp.addTab("MinHash",minhashPanel);
+		SwingUtilities.updateComponentTreeUI(tp);
 	}
 
 	private void generateData() throws IOException {
 		JPanel p = new JPanel(new GridLayout(2,2));
 		JLabel l1 = new JLabel("Insira o ficheiro onde pretende escrever");
-		JLabel l2 = new JLabel("Insira o numero de utilizadores pretendido");
+		JLabel l2 = new JLabel("Insira o numero de utilizadores");
 		JTextField f1 = new JTextField();
 		JTextField f2 = new JTextField();
 		
 		p.add(l1); p.add(f1); p.add(l2); p.add(f2);
 		
-		JOptionPane.showInputDialog(null, p);
+		JOptionPane.showMessageDialog(null, p);
 		
 		DatabaseGen db = new DatabaseGen(f1.getText(),Integer.parseInt(f2.getText()));
 		this.nl = Integer.parseInt(f2.getText());
 		mh.setNl(nl);
 		readFile(f1.getText());
-		createContent();
+		
 	}
 
 	private void addPurchase() {
@@ -221,6 +224,8 @@ public class MainFrame extends JFrame {
 			this.nl = maxID;
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
 			mh = new MinHash(lines,this.nl);
+			
+			minhashPanel.removeAll();
 			createContent();
 		} else {
 			Path fich = Paths.get("src/"+ficheiro);
@@ -241,9 +246,17 @@ public class MainFrame extends JFrame {
 			}
 			this.nl = maxID;
 			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
-			System.out.println("Test: "+nl);
 			mh = new MinHash(lines,this.nl);
+			if(minhashPanel != null)
+				minhashPanel.removeAll();
 			createContent();
+//			if(tp != null) {
+//				tp.removeAll();
+//				createContent();
+//				tp.revalidate();
+//				tp.repaint();
+//			}
+			
 		}
 	}
 }
