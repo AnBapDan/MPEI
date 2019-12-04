@@ -214,5 +214,10 @@ public class MinHash {
 		return tmp[user1-1][user2-1];
 	}
 
+	public int getSizeofListSets() {
+		return listofsets.size();
+	}
+
+	
 
 }
