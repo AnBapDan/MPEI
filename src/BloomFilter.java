@@ -37,10 +37,15 @@ public class BloomFilter {
 		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
 		
 		if(bloom[hashes[0]] == 1 && bloom[hashes[1]] == 1 && bloom[hashes[2]] == 1 && bloom[hashes[3]] == 1 && bloom[hashes[4]] == 1) {
-			System.out.println("Already exists");
+			System.out.println("A Processar -> Utilzador: "+u+" | Produto: "+p+".");
+			System.out.println("Estado -> Ignorado.");
+			System.out.println("-------------------------------------------------");
 			cont++;	
 		} else {
-			System.out.println("Added");
+			
+			System.out.println("A Processar -> Utilzador: "+u+" | Produto: "+p+".");
+			System.out.println("Estado -> Adicionado");
+			System.out.println("-------------------------------------------------");
 			bloom[hashes[0]] = 1;
 			bloom[hashes[1]] = 1;
 			bloom[hashes[2]] = 1;
@@ -54,12 +59,14 @@ public class BloomFilter {
 	
 	private boolean exists(int u, int p) {
 		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
-		System.out.println("Checking if already exists...");
+		System.out.println("Estado -> A Verificar existencia...");
 		for(int i : hashes) {
 			if(bloom[i] == 0) {
+				System.out.println("Estado -> Nao encontrado");
 				return false;
 			}
 		}
+		System.out.println("Estado -> Encontrado.");
 		return true;
 	}
 	
