@@ -384,7 +384,7 @@ public class MainFrame extends JFrame {
 		
 	}
 
-//	private void addPurchase() {
+//	private void addPurchase() {/**/
 //		JPanel p = new JPanel(new GridLayout(2,2));
 //		JTextField field1 = new JTextField();
 //		JTextField field2 = new JTextField();
