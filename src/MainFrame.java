@@ -52,6 +52,8 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		tp = new JTabbedPane();
+		bloomPanel = new JPanel();
+		minhashPanel = new JPanel();
 		content = new JPanel();
 		content.setLayout(new GridLayout(1,3));
 		content.setBackground(Color.GRAY);
@@ -128,7 +130,6 @@ public class MainFrame extends JFrame {
 		leftcol.add(lefttop,BorderLayout.NORTH);
 		leftcol.add(scroller,BorderLayout.CENTER);
 		
-		
 		//Right List column
 		JPanel midcol = new JPanel(new BorderLayout());
 		JPanel midtop = new JPanel();
@@ -147,7 +148,6 @@ public class MainFrame extends JFrame {
 		
 		midcol.add(midtop,BorderLayout.NORTH);
 		midcol.add(scroller2,BorderLayout.CENTER);
-		
 		
 		//Similarity column
 		JPanel right = new JPanel(new GridLayout(2,1));
@@ -335,21 +335,16 @@ public class MainFrame extends JFrame {
 							}
 						}
 						JOptionPane.showMessageDialog(null, qp);						
-					}
-					
+					}	
 				}
 			}
-			
 		});				
 		bottomright.add(search,gc);
-		
 		
 		gc.gridx = 1;
 		gc.gridy = 3;
 		JTextArea textarea = new JTextArea();
 		bottomright.add(textarea,gc);
-		
-		
 		
 		JPanel left = new JPanel(new GridLayout(1,2));
 		left.add(leftcol);
@@ -360,6 +355,7 @@ public class MainFrame extends JFrame {
 		minhashPanel.add(left,BorderLayout.WEST);
 		minhashPanel.add(right,BorderLayout.CENTER);
 		tp.setBounds(0, 0, 200, 200);
+		tp.add("Bloom",bloomPanel);
 	}
 
 	private void generateData() throws IOException {
@@ -381,7 +377,6 @@ public class MainFrame extends JFrame {
 		this.nl = Integer.parseInt(f2.getText());
 		mh.setNl(nl);
 		readFile(f1.getText());
-		
 	}
 
 //	private void addPurchase() {/**/
@@ -398,10 +393,16 @@ public class MainFrame extends JFrame {
 //	}
 
 	public void readFile(String ficheiro) throws IOException {
+		Path p;
+		
 		if(ficheiro.equals("")) {
 			String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
-			Path file = Paths.get("src/"+f);
-			List<String> lines = Files.readAllLines(file);
+			p = Paths.get("src/"+f);
+		} else {
+			p = Paths.get("src/"+ficheiro);
+		}
+		
+			List<String> lines = Files.readAllLines(p);
 			n = lines.size();
 			BloomFilter b = new BloomFilter(n);
 			
@@ -417,7 +418,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 			this.nl = maxID;
-			System.out.println("De "+lines.size()+"compras, apenas"+(lines.size()-b.getCont())+" compras foram adicionadas ao Bloom Filter");
+			System.out.println("De "+lines.size()+" compras, apenas "+(lines.size()-b.getCont())+" foram adicionadas ao Bloom Filter");
 			mh = new MinHash(lines,this.nl);
 			
 			minhashPanel.removeAll();
@@ -425,38 +426,7 @@ public class MainFrame extends JFrame {
 			createContent();
 			minhashPanel.revalidate();
 			minhashPanel.repaint();
-			tp.add("Bloom",bloomPanel);
 			tp.add("MinHash",minhashPanel);
 			this.add(tp);
-		} else {
-			Path fich = Paths.get("src/"+ficheiro);
-			List<String> lines = Files.readAllLines(fich);
-			n = lines.size();
-			BloomFilter b = new BloomFilter(n);
-			
-			int maxID = 0;
-			for(int i = 0; i < lines.size(); i++) {
-				String [] split = lines.get(i).split("\t");
-				int user = Integer.parseInt(split[0]);
-				int prod = Integer.parseInt(split[1]);
-				b.add(user,prod);
-				if(user > maxID) {
-					maxID = user;
-				}
-			}
-			this.nl = maxID;
-			System.out.println("De "+lines.size()+" compras, apenas "+(lines.size()-b.getCont())+" foram adicionadas ao Bloom Filter");
-			mh = new MinHash(lines,this.nl);
-			if(minhashPanel != null)
-				minhashPanel.removeAll();
-			if(tp != null)
-				tp.removeAll();
-			createContent();
-			minhashPanel.revalidate();
-			minhashPanel.repaint();
-			tp.add("Bloom",bloomPanel);
-			tp.add("MinHash",minhashPanel);
-			this.add(tp);		
-		}
 	}
 }
