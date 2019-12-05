@@ -45,6 +45,7 @@ public class MainFrame extends JFrame {
 	private JLabel label1 = new JLabel("Utilizador 1: Esperando valor");
 	private JLabel label2 = new JLabel("Utilizador 2: Esperando valor");
 	private JLabel label3 = new JLabel("Resultado: ");
+	private ArrayList<String> strings;
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
@@ -57,6 +58,7 @@ public class MainFrame extends JFrame {
 		content = new JPanel();
 		content.setLayout(new GridLayout(1,3));
 		content.setBackground(Color.GRAY);
+		strings = new ArrayList<>();
 		bf = new BloomFilter(10000);			 	//Por omissao serao 10000 compras
 		a1 = new ActionListener() {
 
@@ -86,7 +88,7 @@ public class MainFrame extends JFrame {
 		createMenuBar();
 		readFile("db.txt");
 //		createContent();
-		add(tp);
+//		add(tp);
 		setJMenuBar(menubar);
 		setVisible(true);
 	}
@@ -106,11 +108,62 @@ public class MainFrame extends JFrame {
 		menubar.add(menu);
 	}
 	
+	private void createBloomPanel() {
+		
+		bloomPanel = new JPanel(new GridLayout(2,1));
+		
+		JPanel top = new JPanel(new GridBagLayout());
+		JPanel bottom = new JPanel(new BorderLayout());
+		GridBagConstraints gc1 = new GridBagConstraints();
+		
+		gc1.gridx = 0;
+		gc1.gridy = 0;
+		JLabel utilizador = new JLabel("Utilizador");
+		top.add(utilizador,gc1);
+		gc1.gridx = 1;
+		gc1.weighty = 0.1;
+		JTextField utilizadorID = new JTextField();
+		utilizadorID.setPreferredSize(new Dimension(80,20));
+		top.add(utilizadorID,gc1);
+		gc1.gridx = 0;
+		gc1.gridy = 1;
+		JLabel prod = new JLabel("Produto");
+		top.add(prod,gc1);
+		gc1.gridx = 1;
+		JTextField prodID = new JTextField();
+		prodID.setPreferredSize(new Dimension(80,20));
+		top.add(prodID,gc1);
+		gc1.gridy = 2;
+		gc1.weighty = 0.1;
+		JButton button = new JButton("Verificar se existe");
+		button.setPreferredSize(new Dimension(150,25));
+		top.add(button,gc1);
+		
+		JPanel terminal = new JPanel();
+		JTextArea console = new JTextArea();
+		for(int i = 0; i < strings.size(); i++)
+			console.add(new JLabel(getStrings().get(i)));
+		
+		terminal.add(console);
+		bottom.add(terminal,BorderLayout.CENTER);
+		
+		bloomPanel.add(top);
+		bloomPanel.add(bottom);
+	}
+	
+	public void addString(String s) {
+		strings.add(s);
+	}
+	
+	public ArrayList<String> getStrings() {
+		return strings;
+	}
+	
 	private void createContent() {
 		
-		bloomPanel = new JPanel();
 		minhashPanel = new JPanel();
 		
+//MinHashPanel
 		//Left list column
 		JPanel leftcol = new JPanel(new BorderLayout());
 		JPanel lefttop = new JPanel();
@@ -192,7 +245,7 @@ public class MainFrame extends JFrame {
 				embed.add(righttop,egc);
 				if(user1 != 0 && user2 != 0) {
 					if(user1 > user2) {				
-						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
+						label3 = new JLabel("Similaridade: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
 						rightcol.remove(rightresult);
 						rightresult.removeAll();
 						rightcol.revalidate();
@@ -203,7 +256,7 @@ public class MainFrame extends JFrame {
 						rightcol.add(rightresult,rgc);
 					}
 					else if(user1 == user2) {
-						label3 = new JLabel("Resultado: 1.0");
+						label3 = new JLabel("Similaridade: 1.0");
 						rightcol.remove(rightresult);
 						rightresult.removeAll();
 						rightcol.revalidate();
@@ -214,7 +267,7 @@ public class MainFrame extends JFrame {
 						rightcol.add(rightresult,rgc);
 					}
 					else {
-						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
+						label3 = new JLabel("Similaridade: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
 						rightcol.remove(rightresult);
 						rightresult.removeAll();
 						rightcol.revalidate();
@@ -243,7 +296,7 @@ public class MainFrame extends JFrame {
 				embed.add(rightbottom,egc);
 				if(user1 != 0 && user2 != 0) {
 					if(user1 > user2) {				
-						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
+						label3 = new JLabel("Similaridade: "+	String.valueOf(mh.getValueOfMatrix(user2, user1)));
 						rightcol.remove(rightresult);
 						rightresult.removeAll();
 						rightcol.revalidate();
@@ -254,7 +307,7 @@ public class MainFrame extends JFrame {
 						rightcol.add(rightresult,rgc);
 					}
 					else if(user1 == user2) {
-						label3 = new JLabel("Resultado: 1.0");
+						label3 = new JLabel("Similaridade: 1.0");
 						rightcol.remove(rightresult);
 						rightresult.removeAll();
 						rightcol.revalidate();
@@ -265,7 +318,7 @@ public class MainFrame extends JFrame {
 						rightcol.add(rightresult,rgc);
 					}
 					else {
-						label3 = new JLabel("Resultado: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
+						label3 = new JLabel("Similaridade: "+	String.valueOf(mh.getValueOfMatrix(user1, user2)));
 						rightcol.remove(rightresult);
 						rightresult.removeAll();
 						rightcol.revalidate();
@@ -355,7 +408,6 @@ public class MainFrame extends JFrame {
 		minhashPanel.add(left,BorderLayout.WEST);
 		minhashPanel.add(right,BorderLayout.CENTER);
 		tp.setBounds(0, 0, 200, 200);
-		tp.add("Bloom",bloomPanel);
 	}
 
 	private void generateData() throws IOException {
@@ -423,9 +475,11 @@ public class MainFrame extends JFrame {
 			
 			minhashPanel.removeAll();
 			tp.removeAll();
+			createBloomPanel();
 			createContent();
 			minhashPanel.revalidate();
 			minhashPanel.repaint();
+			tp.add("Bloom",bloomPanel);
 			tp.add("MinHash",minhashPanel);
 			this.add(tp);
 	}

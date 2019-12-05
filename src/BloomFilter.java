@@ -52,21 +52,21 @@ public class BloomFilter {
 			bloom[hashes[3]] = 1;
 			bloom[hashes[4]] = 1;	
 		}
-		
-		
-		
 	}
 	
-	private boolean exists(int u, int p) {
+	public boolean exists(int u, int p) {
 		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
-		System.out.println("Estado -> A Verificar existencia...");
+		String s1 = "Estado -> A Verificar existencia...";
+		System.out.println(s1);
 		for(int i : hashes) {
 			if(bloom[i] == 0) {
-				System.out.println("Estado -> Nao encontrado");
+				String s2 = "Estado -> Nao encontrado";
+				System.out.println(s2);
 				return false;
 			}
 		}
-		System.out.println("Estado -> Encontrado.");
+		String s3 = "Estado -> Encontrado.";
+		System.out.println(s3);
 		return true;
 	}
 	
