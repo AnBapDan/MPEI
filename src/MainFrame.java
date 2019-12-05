@@ -58,7 +58,7 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
-		setSize(500, 500);
+		setSize(700, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		tp = new JTabbedPane();
@@ -120,27 +120,29 @@ public class MainFrame extends JFrame {
 
 		bloomPanel = new JPanel(new GridLayout(2,1));
 
-		JPanel top = new JPanel(new GridBagLayout());
+		JPanel top = new JPanel(new BorderLayout());
 		JPanel bottom = new JPanel(new BorderLayout());
 		GridBagConstraints gc1 = new GridBagConstraints();
-
+		JPanel topEmbed = new JPanel(new GridBagLayout());
+		
+		
 		gc1.gridx = 0;
 		gc1.gridy = 0;
 		JLabel utilizador = new JLabel("Utilizador");
-		top.add(utilizador,gc1);
+		topEmbed.add(utilizador,gc1);
 		gc1.gridx = 1;
 		gc1.weighty = 0.1;
 		JTextField utilizadorID = new JTextField();
 		utilizadorID.setPreferredSize(new Dimension(80,20));
-		top.add(utilizadorID,gc1);
+		topEmbed.add(utilizadorID,gc1);
 		gc1.gridx = 0;
 		gc1.gridy = 1;
 		JLabel prod = new JLabel("Produto (ID comeca em 250)");
-		top.add(prod,gc1);
+		topEmbed.add(prod,gc1);
 		gc1.gridx = 1;
 		JTextField prodID = new JTextField();
 		prodID.setPreferredSize(new Dimension(80,20));
-		top.add(prodID,gc1);
+		topEmbed.add(prodID,gc1);
 		gc1.gridy = 2;
 		gc1.gridx = 0;
 		gc1.weighty = 0.1;
@@ -166,9 +168,9 @@ public class MainFrame extends JFrame {
 			}
 
 		});
-		top.add(button,gc1);
+		topEmbed.add(button,gc1);
 		gc1.gridx = 1;
-		gc1.weightx = 0.1;
+		gc1.weightx = 0;
 		JButton button2 = new JButton("Adicionar");
 		button2.setPreferredSize(new Dimension(150,25));
 		button2.addActionListener(new ActionListener() {
@@ -208,11 +210,12 @@ public class MainFrame extends JFrame {
 
 			}
 		});
-		top.add(button2,gc1);
-
+		topEmbed.add(button2,gc1);
+		top.add(topEmbed,BorderLayout.CENTER);
+		
 		terminal = new JPanel();
 		console = new JTextArea();
-		console.setPreferredSize(new Dimension(500,500));
+		console.setPreferredSize(new Dimension(700,500));
 		console.setBackground(Color.BLACK);
 		console.setEnabled(false);
 		console.setText("Consola do Bloom Filter");
@@ -496,7 +499,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void refreshBloom(int all, int added) {
-		console.setText("\n\n\n\n\n\n\n                       De "+all+" compras, apenas "+(all-added)+" foram adicionadas ao Bloom Filter");
+		console.setText("\n\n\n\n\n\n\n                            "
+				+ "	    De "+all+" compras, apenas "+(all-added)+" foram adicionadas ao Bloom Filter");
 	}
 
 	public void readFile(String ficheiro) throws IOException {
@@ -538,7 +542,7 @@ public class MainFrame extends JFrame {
 		bloomPanel.repaint();
 		minhashPanel.revalidate();
 		minhashPanel.repaint();
-		tp.add("Bloom",bloomPanel);
+		tp.add("Bloom Filter",bloomPanel);
 		tp.add("MinHash",minhashPanel);
 		this.add(tp);
 	}
