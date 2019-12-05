@@ -9,14 +9,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
@@ -40,6 +47,7 @@ public class MainFrame extends JFrame {
 	private int nl;
 	private int user1;
 	private int user2;
+	private Path p;
 	private JPanel bloomPanel;
 	private JPanel minhashPanel;
 	private JPanel terminal;
@@ -50,7 +58,7 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
-		setSize(800, 600);
+		setSize(500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		tp = new JTabbedPane();
@@ -89,8 +97,6 @@ public class MainFrame extends JFrame {
 		};
 		createMenuBar();
 		readFile("db.txt");
-//		createContent();
-//		add(tp);
 		setJMenuBar(menubar);
 		setVisible(true);
 	}
@@ -109,15 +115,15 @@ public class MainFrame extends JFrame {
 		menu.add(quit);
 		menubar.add(menu);
 	}
-	
+
 	private void createBloomPanel() {
-		
+
 		bloomPanel = new JPanel(new GridLayout(2,1));
-		
+
 		JPanel top = new JPanel(new GridBagLayout());
 		JPanel bottom = new JPanel(new BorderLayout());
 		GridBagConstraints gc1 = new GridBagConstraints();
-		
+
 		gc1.gridx = 0;
 		gc1.gridy = 0;
 		JLabel utilizador = new JLabel("Utilizador");
@@ -129,56 +135,106 @@ public class MainFrame extends JFrame {
 		top.add(utilizadorID,gc1);
 		gc1.gridx = 0;
 		gc1.gridy = 1;
-		JLabel prod = new JLabel("Produto");
+		JLabel prod = new JLabel("Produto (ID comeca em 250)");
 		top.add(prod,gc1);
 		gc1.gridx = 1;
 		JTextField prodID = new JTextField();
 		prodID.setPreferredSize(new Dimension(80,20));
 		top.add(prodID,gc1);
 		gc1.gridy = 2;
+		gc1.gridx = 0;
 		gc1.weighty = 0.1;
 		JButton button = new JButton("Verificar se existe");
 		button.setPreferredSize(new Dimension(150,25));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(bf.exists(Integer.parseInt(utilizadorID.getText()), Integer.parseInt(prodID.getText()))) {
-					JOptionPane.showMessageDialog(null, "O utilizador "+Integer.parseInt(utilizadorID.getText())+" ja comprou o produto "+
-												  Integer.parseInt(prodID.getText()));
+				int user = Integer.parseInt(utilizadorID.getText());
+				int prod = Integer.parseInt(prodID.getText());
+
+				if(user < 1 || user > mh.getNl()) {
+					JOptionPane.showMessageDialog(null,"ID de utilizador invalido");
+				} else if(prod < 250) {
+					JOptionPane.showMessageDialog(null,"ID de produto invalido");
 				} else {
-					JOptionPane.showMessageDialog(null, "O utilizador "+Integer.parseInt(utilizadorID.getText())+" ainda nao comprou o produto "+
-							 				  	 Integer.parseInt(prodID.getText()));
+					if(bf.exists(user, prod)) {
+						JOptionPane.showMessageDialog(null, "O utilizador "+user+" ja comprou o produto "+prod);
+					} else {
+						JOptionPane.showMessageDialog(null, "O utilizador "+user+" ainda nao comprou o produto "+prod);
+					}
 				}
 			}
-			
+
 		});
 		top.add(button,gc1);
-		
+		gc1.gridx = 1;
+		gc1.weightx = 0.1;
+		JButton button2 = new JButton("Adicionar");
+		button2.setPreferredSize(new Dimension(150,25));
+		button2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int user = Integer.parseInt(utilizadorID.getText());
+				int prod = Integer.parseInt(prodID.getText());
+				if(user < 1 || user > mh.getNl()) {
+					JOptionPane.showMessageDialog(null,"ID de utilizador invalido");
+				} else if(!(bf.exists(user, prod))) {
+					bf.add(user, prod);
+					File file = new File(p.getFileName().toString());
+					PrintWriter pw = null;
+					try {
+						pw = new PrintWriter(file);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
+					pw.println(user+"\t"+prod);
+					pw.close();
+					List<String> lin = new ArrayList<>();
+					try {
+						lin = Files.readAllLines(p);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					mh = new MinHash(lin,mh.getNl());
+					JOptionPane.showMessageDialog(null, "Adicionada compra do produto "+prod+" pelo utilizador "+user);
+				} else {
+					JOptionPane.showMessageDialog(null, "O utilizador "+user+" ja comprou o produto "+prod);
+				}
+
+			}
+		});
+		top.add(button2,gc1);
+
 		terminal = new JPanel();
 		console = new JTextArea();
 		console.setPreferredSize(new Dimension(500,500));
 		console.setBackground(Color.BLACK);
 		console.setEnabled(false);
-		
+		console.setText("Consola do Bloom Filter");
 		terminal.add(console);
 		bottom.add(terminal,BorderLayout.CENTER);
-		
+
 		bloomPanel.add(top);
 		bloomPanel.add(bottom);
 	}
-	
+
 	private void createContent() {
-		
+
 		minhashPanel = new JPanel();
-		
-//MinHashPanel
+
+		//MinHashPanel
 		//Left list column
 		JPanel leftcol = new JPanel(new BorderLayout());
 		JPanel lefttop = new JPanel();
 		lefttop.setPreferredSize(new Dimension(50,20));
 		JLabel leftcolName = new JLabel("Lista 1");
 		DefaultListModel<Object> lm = new DefaultListModel<>();
-		
+
 		int size = mh.getSizeofListSets();
 		for(int i = 0; i < size ; i++) {
 			lm.add(i, i+1);
@@ -187,17 +243,17 @@ public class MainFrame extends JFrame {
 		JScrollPane scroller = new JScrollPane(area1);
 		scroller.setPreferredSize(new Dimension(100,500));
 		lefttop.add(leftcolName);
-		
+
 		leftcol.add(lefttop,BorderLayout.NORTH);
 		leftcol.add(scroller,BorderLayout.CENTER);
-		
+
 		//Right List column
 		JPanel midcol = new JPanel(new BorderLayout());
 		JPanel midtop = new JPanel();
 		midtop.setPreferredSize(new Dimension(50,20));
 		JLabel midcolName = new JLabel("Lista 2");
 		DefaultListModel<Object> lm2 = new DefaultListModel<>();
-		
+
 		int size2 = mh.getSizeofListSets();
 		for(int i = 0; i < size2 ; i++) {
 			lm2.add(i, i+1);
@@ -206,23 +262,23 @@ public class MainFrame extends JFrame {
 		JScrollPane scroller2 = new JScrollPane(area2);
 		scroller.setPreferredSize(new Dimension(100,500));
 		midtop.add(midcolName);
-		
+
 		midcol.add(midtop,BorderLayout.NORTH);
 		midcol.add(scroller2,BorderLayout.CENTER);
-		
+
 		//Similarity column
 		JPanel right = new JPanel(new GridLayout(2,1));
-		
+
 		JPanel rightcol = new JPanel(new GridBagLayout());
 		GridBagConstraints rgc = new GridBagConstraints();
-		
+
 		JPanel righttop = new JPanel();
 		JPanel rightbottom = new JPanel();
 		JPanel rightresult = new JPanel();
-		
+
 		JPanel embed = new JPanel(new GridBagLayout());
 		GridBagConstraints egc = new GridBagConstraints();
-		
+
 		righttop.add(label1);
 		rightbottom.add(label2);
 		rightresult.add(label3);
@@ -231,13 +287,13 @@ public class MainFrame extends JFrame {
 		embed.add(righttop,egc);
 		egc.gridy = 1;
 		embed.add(rightbottom,egc);
-		
+
 		rgc.gridx = 0;
 		rgc.gridy = 0;
 		rightcol.add(embed,rgc);
 		rgc.gridy = 1;
 		rightcol.add(rightresult,rgc);
-		
+
 		area1.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				JList<Object> tmp = (JList<Object>) e.getSource();
@@ -288,7 +344,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		area2.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				JList<Object> tmp = (JList<Object>) e.getSource();
@@ -339,7 +395,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		JPanel bottomright = new JPanel(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx = 0;
@@ -377,7 +433,7 @@ public class MainFrame extends JFrame {
 					boolean first = true;
 					if(tmp.size() > 20 ) {
 						JOptionPane.showMessageDialog(null, "Foram encontrados "+tmp.size()+" valores com a similaridade igual ou superior a "+
-													  Double.parseDouble(text.getText()));
+								Double.parseDouble(text.getText()));
 					} else if (tmp.size() == 0) {
 						JOptionPane.showMessageDialog(null, "Nao existem quaisquer utilizadores a apresentar.");
 					} else {
@@ -401,12 +457,12 @@ public class MainFrame extends JFrame {
 			}
 		});				
 		bottomright.add(search,gc);
-		
+
 		gc.gridx = 1;
 		gc.gridy = 3;
 		JTextArea textarea = new JTextArea();
 		bottomright.add(textarea,gc);
-		
+
 		JPanel left = new JPanel(new GridLayout(1,2));
 		left.add(leftcol);
 		left.add(midcol);
@@ -428,94 +484,62 @@ public class MainFrame extends JFrame {
 		JTextField f2 = new JTextField();
 		JTextField f3 = new JTextField();
 		JTextField f4 = new JTextField();
-		
+
 		p.add(l1); p.add(f1); p.add(l2); p.add(f2); p.add(l3); p.add(f3); p.add(l4); p.add(f4);
-		
+
 		JOptionPane.showMessageDialog(null, p);
-		
+
 		DatabaseGen db = new DatabaseGen(f1.getText(),Integer.parseInt(f2.getText()),Integer.parseInt(f3.getText()),Integer.parseInt(f4.getText()));
 		this.nl = Integer.parseInt(f2.getText());
 		mh.setNl(nl);
 		readFile(f1.getText());
 	}
-	
-	public void refreshBloom(int user, int prod, boolean state, boolean end) {
 
-		tp.removeAll();
-		bloomPanel.remove(terminal);
-		terminal.remove(console);
-		console.removeAll();
-		
-		if(end == true) {
-			console.add(new JLabel("De "+user+" compras, apenas "+(user-bf.getCont())+" foram adicionadas ao Bloom Filter"));
-			console.revalidate();
-			console.repaint();
-			terminal.add(console);
-			bloomPanel.add(terminal);
-			tp.add(bloomPanel);
-			tp.add(minhashPanel);
-			this.add(tp);
-		} else {
-			console.add(new JLabel("A Processar -> Utilizador: "+user+" | Produto: "+prod+".\n"));
-			if(state)
-				console.add(new JLabel("Estado -> Adicionado"));
-			else
-				console.add(new JLabel("Estado -> Ignorado"));
-			console.setBackground(Color.BLACK);
-			console.setEnabled(false);
-			console.setPreferredSize(new Dimension(500,500));
-			console.revalidate();
-			console.repaint();
-			terminal.add(console);
-			bloomPanel.add(terminal);
-			tp.add(bloomPanel);
-			tp.add(minhashPanel);
-			this.add(tp);
-		}
+	public void refreshBloom(int all, int added) {
+		console.setText("\n\n\n\n\n\n\n                       De "+all+" compras, apenas "+(all-added)+" foram adicionadas ao Bloom Filter");
 	}
-	
+
 	public void readFile(String ficheiro) throws IOException {
-		Path p;
-		
+
 		if(ficheiro.equals("")) {
 			String f = JOptionPane.showInputDialog(null,"Insira o ficheiro que quer ler (tem de estar na pasta src) ");
 			p = Paths.get("src/"+f);
 		} else {
 			p = Paths.get("src/"+ficheiro);
 		}
-		
-			List<String> lines = Files.readAllLines(p);
-			n = lines.size();
-			bf = new BloomFilter(n);
-			
-			int maxID = 0;
-			for(int i = 0; i < lines.size(); i++) {
-				String [] split = lines.get(i).split("\t");
-				int user = Integer.parseInt(split[0]);
-				int prod = Integer.parseInt(split[1]);
-				boolean state = bf.add(user,prod);
-				refreshBloom(user,prod,state,false);
-				
-				if(user > maxID) {
-					maxID = user;
-				}
+		List<String> lines = Files.readAllLines(p);
+		n = lines.size();
+		bf = new BloomFilter(n);
+
+		bloomPanel.removeAll();
+		minhashPanel.removeAll();
+		tp.removeAll();
+
+		int maxID = 0;
+		for(int i = 0; i < lines.size(); i++) {
+			String [] split = lines.get(i).split("\t");
+			int user = Integer.parseInt(split[0]);
+			int prod = Integer.parseInt(split[1]);
+			bf.add(user,prod);
+
+			if(user > maxID) {
+				maxID = user;
 			}
-			this.nl = maxID;
-			System.out.println("De "+lines.size()+" compras, apenas "+(lines.size()-bf.getCont())+" foram adicionadas ao Bloom Filter");
-			refreshBloom(lines.size(),1,false,true);
-			mh = new MinHash(lines,this.nl);
-			
-			bloomPanel.removeAll();
-			minhashPanel.removeAll();
-			tp.removeAll();
-			createBloomPanel();
-			createContent();
-			bloomPanel.revalidate();
-			bloomPanel.repaint();
-			minhashPanel.revalidate();
-			minhashPanel.repaint();
-			tp.add("Bloom",bloomPanel);
-			tp.add("MinHash",minhashPanel);
-			this.add(tp);
+		}
+		this.nl = maxID;
+
+		System.out.println("De "+lines.size()+" compras, apenas "+(lines.size()-bf.getCont())+" foram adicionadas ao Bloom Filter");
+
+		createBloomPanel();
+		refreshBloom(lines.size(),bf.getCont());
+		mh = new MinHash(lines,this.nl);
+		createContent();
+		bloomPanel.revalidate();
+		bloomPanel.repaint();
+		minhashPanel.revalidate();
+		minhashPanel.repaint();
+		tp.add("Bloom",bloomPanel);
+		tp.add("MinHash",minhashPanel);
+		this.add(tp);
 	}
 }
