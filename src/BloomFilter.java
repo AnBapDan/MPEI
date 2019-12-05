@@ -18,24 +18,42 @@ public class BloomFilter {
 	}
 	
 	public void add(int u, int p) {
+//		
+//		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
+//		boolean bol = exists(u,p);
+//		if(bol) {
+//			System.out.println("Already exists");
+//			cont++;
+//		} else {
+//			System.out.println("Added");
+//			bloom[hashes[0]] = 1;
+//			bloom[hashes[1]] = 1;
+//			bloom[hashes[2]] = 1;
+//			bloom[hashes[3]] = 1;
+//			bloom[hashes[4]] = 1;
+//			
+//		}
 		
 		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
-		boolean bol = exists(u,p,hashes);
-		if(bol) {
+		
+		if(bloom[hashes[0]] == 1 && bloom[hashes[1]] == 1 && bloom[hashes[2]] == 1 && bloom[hashes[3]] == 1 && bloom[hashes[4]] == 1) {
 			System.out.println("Already exists");
-			cont++;
+			cont++;	
 		} else {
 			System.out.println("Added");
 			bloom[hashes[0]] = 1;
 			bloom[hashes[1]] = 1;
 			bloom[hashes[2]] = 1;
 			bloom[hashes[3]] = 1;
-			bloom[hashes[4]] = 1;
-			
-		}	
+			bloom[hashes[4]] = 1;	
+		}
+		
+		
+		
 	}
 	
-	private boolean exists(int u, int p, int[] hashes) {
+	private boolean exists(int u, int p) {
+		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
 		System.out.println("Checking if already exists...");
 		for(int i : hashes) {
 			if(bloom[i] == 0) {
@@ -66,15 +84,7 @@ public class BloomFilter {
 	}
 	
 	private int hash2(long hashuser,long hashprod) {
-		if(a==0) {																					//Needs to be reseted after each row
-			try {
-				p= (int)(Math.random()*3)+1;	
-				p= prime[3+p-1];																	//tries to copy the prime number of the array
-			}
-			catch(Exception e) {p=prime[prime.length-1];}											//if tmp+p-1 is bigger than the array prime,it chooses the last index
-			a= (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
-			b= (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
-		}
+		
 		if(a!=0 & b!= 0 & p!=0 & M!=0) {
 			return (int) Math.abs((((a*hashuser-hashprod*b) % M )% p)% bloom.length);
 		}
@@ -82,15 +92,7 @@ public class BloomFilter {
 	}
 	
 	private int hash3(long hashuser,long hashprod) {
-		if(a == 0) {																					//Needs to be reseted after each row
-			try {
-				p = (int)(Math.random()*11)+1;	
-				p = prime[p-1];																	
-			}
-			catch(Exception e) {p=prime[prime.length-1];}											
-			a = (long) (Math.random()*p)+1;															
-			b = (long) (Math.random()*p)+1;																								
-		}
+
 		if(a != 0 & b != 0 & p != 0) {
 			return (int) Math.abs((((hashprod*p*a*hashuser)/Math.log(2)*b)%p)% bloom.length);
 		}
@@ -98,15 +100,7 @@ public class BloomFilter {
 	}
 
 	private int hash4(long hashuser,long hashprod) {
-		if(a == 0) {																					//Needs to be reseted after each row
-			try {
-				p = (int)(Math.random()*11)+1;	
-				p = prime[p-1];																	
-			}
-			catch(Exception e) {p=prime[prime.length-1];}											
-			a = (long) (Math.random()*p)+1;															
-			b = (long) (Math.random()*p)+1;																								
-		}
+
 		if(a != 0 & b != 0 & p !=0) {
 			return (int) Math.abs(((Math.pow(a*hashprod*hashuser,2)/Math.log(b))%p)% bloom.length);
 		}	
@@ -114,15 +108,7 @@ public class BloomFilter {
 	}
 
 	private int hash5(long hashuser,long hashprod) {
-		if(a == 0) {																					//Needs to be reseted after each row
-			try {
-				p = (int)(Math.random()*11)+1;	
-				p = prime[p-1];																	
-			}
-			catch(Exception e) {p=prime[prime.length-1];}											
-			a = (long) (Math.random()*p)+1;															
-			b = (long) (Math.random()*p)+1;																								
-		}
+
 		if(a != 0 & b != 0 & p !=0) {
 			return (int) Math.abs(((Math.pow(a*hashprod*hashuser,2)/Math.log(p))%b)%bloom.length);
 		}	
