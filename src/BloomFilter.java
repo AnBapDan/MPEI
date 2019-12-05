@@ -8,6 +8,8 @@ public class BloomFilter {
 	private static final int M = 38327;
 	private int cont;
 	
+	private static double pe = 0.01;
+	private int n;
 	
 	public BloomFilter(int n) {
 		bloom = new int[n*8];
@@ -15,43 +17,37 @@ public class BloomFilter {
 		b = 0;
 		p = 0;
 		cont = 0;
+		this.n = n;
 	}
 	
-	public void add(int u, int p) {
-//		
-//		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
-//		boolean bol = exists(u,p);
-//		if(bol) {
-//			System.out.println("Already exists");
-//			cont++;
-//		} else {
-//			System.out.println("Added");
-//			bloom[hashes[0]] = 1;
-//			bloom[hashes[1]] = 1;
-//			bloom[hashes[2]] = 1;
-//			bloom[hashes[3]] = 1;
-//			bloom[hashes[4]] = 1;
-//			
-//		}
-		
+	public boolean add(int u, int p) {
 		int[] hashes = {hash1(u,p),hash2(u,p),hash3(u,p),hash4(u,p),hash5(u,p)};
 		
+		boolean state;
 		if(bloom[hashes[0]] == 1 && bloom[hashes[1]] == 1 && bloom[hashes[2]] == 1 && bloom[hashes[3]] == 1 && bloom[hashes[4]] == 1) {
-			System.out.println("A Processar -> Utilzador: "+u+" | Produto: "+p+".");
-			System.out.println("Estado -> Ignorado.");
-			System.out.println("-------------------------------------------------");
+			String s1 = "A Processar -> Utilizador: "+u+" | Produto: "+p+".";
+			String s2 = "Estado -> Ignorado.";
+			String s3 = "-------------------------------------------------";
+			System.out.println(s1);
+			System.out.println(s2);
+			System.out.println(s3);
+			state = false;
 			cont++;	
 		} else {
-			
-			System.out.println("A Processar -> Utilzador: "+u+" | Produto: "+p+".");
-			System.out.println("Estado -> Adicionado");
-			System.out.println("-------------------------------------------------");
+			String s1 = "A Processar -> Utilizador: "+u+" | Produto: "+p+".";
+			String s2 = "Estado -> Adicionado";
+			String s3 = "-------------------------------------------------";
+			System.out.println(s1);
+			System.out.println(s2);
+			System.out.println(s3);
 			bloom[hashes[0]] = 1;
 			bloom[hashes[1]] = 1;
 			bloom[hashes[2]] = 1;
 			bloom[hashes[3]] = 1;
-			bloom[hashes[4]] = 1;	
+			bloom[hashes[4]] = 1;
+			state = true;
 		}
+		return state;
 	}
 	
 	public boolean exists(int u, int p) {

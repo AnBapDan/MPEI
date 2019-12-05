@@ -42,10 +42,11 @@ public class MainFrame extends JFrame {
 	private int user2;
 	private JPanel bloomPanel;
 	private JPanel minhashPanel;
+	private JPanel terminal;
+	private JTextArea console;
 	private JLabel label1 = new JLabel("Utilizador 1: Esperando valor");
 	private JLabel label2 = new JLabel("Utilizador 2: Esperando valor");
 	private JLabel label3 = new JLabel("Resultado: ");
-	private ArrayList<String> strings;
 
 	public MainFrame() throws IOException {
 		super("Habitos de Compras");
@@ -55,10 +56,11 @@ public class MainFrame extends JFrame {
 		tp = new JTabbedPane();
 		bloomPanel = new JPanel();
 		minhashPanel = new JPanel();
+		terminal = new JPanel();
+		console = new JTextArea();
 		content = new JPanel();
 		content.setLayout(new GridLayout(1,3));
 		content.setBackground(Color.GRAY);
-		strings = new ArrayList<>();
 		bf = new BloomFilter(10000);			 	//Por omissao serao 10000 compras
 		a1 = new ActionListener() {
 
@@ -137,26 +139,32 @@ public class MainFrame extends JFrame {
 		gc1.weighty = 0.1;
 		JButton button = new JButton("Verificar se existe");
 		button.setPreferredSize(new Dimension(150,25));
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(bf.exists(Integer.parseInt(utilizadorID.getText()), Integer.parseInt(prodID.getText()))) {
+					JOptionPane.showMessageDialog(null, "O utilizador "+Integer.parseInt(utilizadorID.getText())+" ja comprou o produto "+
+												  Integer.parseInt(prodID.getText()));
+				} else {
+					JOptionPane.showMessageDialog(null, "O utilizador "+Integer.parseInt(utilizadorID.getText())+" ainda nao comprou o produto "+
+							 				  	 Integer.parseInt(prodID.getText()));
+				}
+			}
+			
+		});
 		top.add(button,gc1);
 		
-		JPanel terminal = new JPanel();
-		JTextArea console = new JTextArea();
-		for(int i = 0; i < strings.size(); i++)
-			console.add(new JLabel(getStrings().get(i)));
+		terminal = new JPanel();
+		console = new JTextArea();
+		console.setPreferredSize(new Dimension(500,500));
+		console.setBackground(Color.BLACK);
+		console.setEnabled(false);
 		
 		terminal.add(console);
 		bottom.add(terminal,BorderLayout.CENTER);
 		
 		bloomPanel.add(top);
 		bloomPanel.add(bottom);
-	}
-	
-	public void addString(String s) {
-		strings.add(s);
-	}
-	
-	public ArrayList<String> getStrings() {
-		return strings;
 	}
 	
 	private void createContent() {
@@ -430,20 +438,42 @@ public class MainFrame extends JFrame {
 		mh.setNl(nl);
 		readFile(f1.getText());
 	}
+	
+	public void refreshBloom(int user, int prod, boolean state, boolean end) {
 
-//	private void addPurchase() {/**/
-//		JPanel p = new JPanel(new GridLayout(2,2));
-//		JTextField field1 = new JTextField();
-//		JTextField field2 = new JTextField();
-//		JLabel l1 = new JLabel("ID do utilizador (1-1000) ");
-//		JLabel l2 = new JLabel("ID do produto ");
-//		p.add(l1); p.add(field1); p.add(l2); p.add(field2);
-//		JOptionPane.showMessageDialog(null, p);
-//		int user = Integer.parseInt(field1.getText());
-//		int prod = Integer.parseInt(field2.getText());
-//		bf.add(user,prod);
-//	}
-
+		tp.removeAll();
+		bloomPanel.remove(terminal);
+		terminal.remove(console);
+		console.removeAll();
+		
+		if(end == true) {
+			console.add(new JLabel("De "+user+" compras, apenas "+(user-bf.getCont())+" foram adicionadas ao Bloom Filter"));
+			console.revalidate();
+			console.repaint();
+			terminal.add(console);
+			bloomPanel.add(terminal);
+			tp.add(bloomPanel);
+			tp.add(minhashPanel);
+			this.add(tp);
+		} else {
+			console.add(new JLabel("A Processar -> Utilizador: "+user+" | Produto: "+prod+".\n"));
+			if(state)
+				console.add(new JLabel("Estado -> Adicionado"));
+			else
+				console.add(new JLabel("Estado -> Ignorado"));
+			console.setBackground(Color.BLACK);
+			console.setEnabled(false);
+			console.setPreferredSize(new Dimension(500,500));
+			console.revalidate();
+			console.repaint();
+			terminal.add(console);
+			bloomPanel.add(terminal);
+			tp.add(bloomPanel);
+			tp.add(minhashPanel);
+			this.add(tp);
+		}
+	}
+	
 	public void readFile(String ficheiro) throws IOException {
 		Path p;
 		
@@ -456,27 +486,32 @@ public class MainFrame extends JFrame {
 		
 			List<String> lines = Files.readAllLines(p);
 			n = lines.size();
-			BloomFilter b = new BloomFilter(n);
+			bf = new BloomFilter(n);
 			
 			int maxID = 0;
 			for(int i = 0; i < lines.size(); i++) {
 				String [] split = lines.get(i).split("\t");
 				int user = Integer.parseInt(split[0]);
 				int prod = Integer.parseInt(split[1]);
-				b.add(user,prod);
+				boolean state = bf.add(user,prod);
+				refreshBloom(user,prod,state,false);
 				
 				if(user > maxID) {
 					maxID = user;
 				}
 			}
 			this.nl = maxID;
-			System.out.println("De "+lines.size()+" compras, apenas "+(lines.size()-b.getCont())+" foram adicionadas ao Bloom Filter");
+			System.out.println("De "+lines.size()+" compras, apenas "+(lines.size()-bf.getCont())+" foram adicionadas ao Bloom Filter");
+			refreshBloom(lines.size(),1,false,true);
 			mh = new MinHash(lines,this.nl);
 			
+			bloomPanel.removeAll();
 			minhashPanel.removeAll();
 			tp.removeAll();
 			createBloomPanel();
 			createContent();
+			bloomPanel.revalidate();
+			bloomPanel.repaint();
 			minhashPanel.revalidate();
 			minhashPanel.repaint();
 			tp.add("Bloom",bloomPanel);
