@@ -30,7 +30,6 @@ public class MainFrame extends JFrame {
 	private JMenuBar menubar;
 	private JMenu menu;
 	private JMenuItem menuitem1;
-	private JMenuItem menuitem2;
 	private JMenuItem quit;
 	private JTabbedPane tp;
 	private ActionListener a1;
@@ -69,8 +68,6 @@ public class MainFrame extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				} else if(item == menuitem2) {
-					addPurchase();
 				} else if(item == quit) {
 					int y = JOptionPane.showConfirmDialog(null, "Deseja mesmo sair?");
 					if(y == 0) System.exit(0);
@@ -97,14 +94,11 @@ public class MainFrame extends JFrame {
 		menu = new JMenu("Menu");
 		menuitem1 = new JMenuItem("Gerar Base de Dados Aleatorios");
 		menuitem1.addActionListener(a1);
-		menuitem2 = new JMenuItem("Adicionar Compra");
-		menuitem2.addActionListener(a1);
 		quit = new JMenuItem("Sair");
 		quit.addActionListener(a1);
 		readFile = new JMenuItem("Ler novo ficheiro");
 		readFile.addActionListener(a1);
 		menu.add(menuitem1);
-		menu.add(menuitem2);
 		menu.add(readFile);
 		menu.add(quit);
 		menubar.add(menu);
@@ -369,35 +363,39 @@ public class MainFrame extends JFrame {
 	}
 
 	private void generateData() throws IOException {
-		JPanel p = new JPanel(new GridLayout(2,2));
+		JPanel p = new JPanel(new GridLayout(4,4));
 		JLabel l1 = new JLabel("Insira o ficheiro onde pretende escrever");
 		JLabel l2 = new JLabel("Insira o numero de utilizadores");
+		JLabel l3 = new JLabel("Insira o numero de produtos diferentes");
+		JLabel l4 = new JLabel("Insira o numero de compras a fazer");
 		JTextField f1 = new JTextField();
 		JTextField f2 = new JTextField();
+		JTextField f3 = new JTextField();
+		JTextField f4 = new JTextField();
 		
-		p.add(l1); p.add(f1); p.add(l2); p.add(f2);
+		p.add(l1); p.add(f1); p.add(l2); p.add(f2); p.add(l3); p.add(f3); p.add(l4); p.add(f4);
 		
 		JOptionPane.showMessageDialog(null, p);
 		
-		DatabaseGen db = new DatabaseGen(f1.getText(),Integer.parseInt(f2.getText()));
+		DatabaseGen db = new DatabaseGen(f1.getText(),Integer.parseInt(f2.getText()),Integer.parseInt(f3.getText()),Integer.parseInt(f4.getText()));
 		this.nl = Integer.parseInt(f2.getText());
 		mh.setNl(nl);
 		readFile(f1.getText());
 		
 	}
 
-	private void addPurchase() {
-		JPanel p = new JPanel(new GridLayout(2,2));
-		JTextField field1 = new JTextField();
-		JTextField field2 = new JTextField();
-		JLabel l1 = new JLabel("ID do utilizador (1-1000) ");
-		JLabel l2 = new JLabel("ID do produto ");
-		p.add(l1); p.add(field1); p.add(l2); p.add(field2);
-		JOptionPane.showMessageDialog(null, p);
-		int user = Integer.parseInt(field1.getText());
-		int prod = Integer.parseInt(field2.getText());
-		bf.add(user,prod);
-	}
+//	private void addPurchase() {
+//		JPanel p = new JPanel(new GridLayout(2,2));
+//		JTextField field1 = new JTextField();
+//		JTextField field2 = new JTextField();
+//		JLabel l1 = new JLabel("ID do utilizador (1-1000) ");
+//		JLabel l2 = new JLabel("ID do produto ");
+//		p.add(l1); p.add(field1); p.add(l2); p.add(field2);
+//		JOptionPane.showMessageDialog(null, p);
+//		int user = Integer.parseInt(field1.getText());
+//		int prod = Integer.parseInt(field2.getText());
+//		bf.add(user,prod);
+//	}
 
 	public void readFile(String ficheiro) throws IOException {
 		if(ficheiro.equals("")) {
@@ -419,7 +417,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 			this.nl = maxID;
-			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+			System.out.println("De "+lines.size()+"compras, apenas"+(lines.size()-b.getCont())+" compras foram adicionadas ao Bloom Filter");
 			mh = new MinHash(lines,this.nl);
 			
 			minhashPanel.removeAll();
@@ -447,7 +445,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 			this.nl = maxID;
-			System.out.println(lines.size()-b.getCont()+" compras adicionadas ao Bloom Filter");
+			System.out.println("De "+lines.size()+" compras, apenas "+(lines.size()-b.getCont())+" foram adicionadas ao Bloom Filter");
 			mh = new MinHash(lines,this.nl);
 			if(minhashPanel != null)
 				minhashPanel.removeAll();
