@@ -9,7 +9,7 @@ public class testBloom {
 
 	public static void main(String[] args) throws IOException {
 
-		Path f = Paths.get("src/testbloom.txt");
+		Path f = Paths.get("src/testbloom.txt"); //Foram testados com mais ficheiros, que por uma questão de memória apagámos
 		Scanner scf = new Scanner(f);
 		List<String> lines = Files.readAllLines(f);
 		BloomFilter b = new BloomFilter(lines.size());

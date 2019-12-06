@@ -15,7 +15,7 @@ public class DatabaseGen {
 		this.npurchases = npurchases;
 		writer = new PrintWriter("src/db.txt");
 		for(int i = 0; i< npurchases; i++) {
-			int code = (int) ((Math.random()*nprods)+250); // Generates code numbers from 250-350 (100 products only)
+			int code = (int) ((Math.random()*nprods)+250); // Generates code numbers from 250 to nprods
 			int user = (int) ((Math.random()*this.nl)+1);
 			writer.println(user+"\t"+code);
 
@@ -30,7 +30,7 @@ public class DatabaseGen {
 		File f = new File("src/"+s);
 		writer = new PrintWriter(f);
 		for(int i = 0; i < npurchases; i++) {
-			int code = (int) ((Math.random()*nprods)+250); // Generates code numbers from 250-350 (100 products only)
+			int code = (int) ((Math.random()*nprods)+250); // Generates code numbers from 250 to nprods
 			int user = (int) ((Math.random()*this.nl)+1);
 			writer.println(user+"\t"+code);
 		}

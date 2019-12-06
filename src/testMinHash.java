@@ -17,8 +17,8 @@ public class testMinHash {
 		MinHash mh = new MinHash(lines,500);
 		
 		
-		PrintWriter pw = new PrintWriter("src/pw.txt");
-		
+		PrintWriter pw = new PrintWriter("src/pw.txt"); //Inicialmente testámos para analisar a matriz de similaridade de todos os utilizadores
+														 
 		double[][] tmp = mh.getMatrix();
 		for(int i = 0; i < mh.getNl(); i++) {
 			for(int j = 0; j < mh.getNl(); j++) {

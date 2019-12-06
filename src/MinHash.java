@@ -15,9 +15,9 @@ public class MinHash {
 
 	public MinHash(List<String> lines, int nl) {
 		this.nl=nl;
-		mins = new long[k][this.nl];																	//initialize a zero matrix with k rows and nl columns
+		mins = new long[k][this.nl];																//initialize a zero matrix with k rows and nl columns
 		matrix = new double[this.nl][this.nl];
-		listofsets = new ArrayList<Set<Long>>();														//creates an empty List to receive each user Set 
+		listofsets = new ArrayList<Set<Long>>();													//creates an empty List to receive each user Set 
 		this.lines = lines;
 
 		hashes();
@@ -71,7 +71,7 @@ public class MinHash {
 		Set<Long>c = new HashSet<Long>(a);															//Copies the a Set 
 		c.retainAll(b);																				//Keeps the common hashes of a and b Sets in the copied Set
 		double intersection = c.size();
-		similarity = intersection/k;                     											 //(a.size()+b.size()-intersection);  (number of min / number of hash functions used)
+		similarity = intersection/k;                     											//(a.size()+b.size()-intersection);  (number of min / number of hash functions used)
 		return similarity;
 	}
 
@@ -96,7 +96,7 @@ public class MinHash {
 
 	private long minhashf(long hashprod) {															//switches between to types of hash functions
 		if(x == 0) {																				//Needs to be reseted after each row
-			x = (int) ((Math.random()*5)+1);														//TODO
+			x = (int) ((Math.random()*5)+1);														
 			//x=1;
 		}
 		switch(x) {
@@ -131,7 +131,7 @@ public class MinHash {
 			b = (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
 		}
 		if(a != 0 & b != 0 & p != 0 & M != 0) {
-			return(((a*hashprod+b) % p )% M);														//ℎ𝑎,𝑏(𝑥)=((𝑎𝑥+𝑏)𝑚𝑜𝑑𝑝)𝑚𝑜𝑑𝑀;
+			return(((a*hashprod+b) % p )% M);														
 		}
 		return -1;																					//error code										
 	}
@@ -147,13 +147,13 @@ public class MinHash {
 			b = (long) (Math.random()*p)+1;															//generates a number between 1 and the prime P
 		}
 		if(a != 0 & b != 0 & p != 0 & M != 0) {
-			return Math.abs(((a-hashprod*b) % M )% p);												//ℎ𝑎,𝑏(𝑥)=|((𝑎-𝑥*𝑏)𝑚𝑜𝑑M)𝑚𝑜𝑑p|;
+			return Math.abs(((a-hashprod*b) % M )% p);												
 		}
 		return -1;	
 	}
 
 	private long hash3(long hashprod) {
-		if(a == 0) {																					//Needs to be reseted after each row
+		if(a == 0) {																				//Needs to be reseted after each row
 			try {
 				p = (int)(Math.random()*11)+1;	
 				p = prime[p-1];																	
